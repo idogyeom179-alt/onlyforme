@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://onlyforme-1776713599.netlify.app/ -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#22c55e">
+<meta name="apple-mobile-web-app-title" content="OnlyForMe">
+<meta name="apple-touch-icon" content="/icons/icon-192.png">
+<title>Only For Me</title>
+<link rel="manifest" href="https://onlyforme-1776713599.netlify.app/manifest.json">
+<script src="./Only For Me_files/client" async=""></script>
+<link rel="apple-touch-icon" href="https://onlyforme-1776713599.netlify.app/icons/icon-192.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f0fdf4;--bg2:#dcfce7;--card:#ffffff;--card2:#f0fdf4;
+  --accent:#16a34a;--accent2:#22c55e;--green:#16a34a;--red:#ef4444;
+  --yellow:#f59e0b;--blue:#3b82f6;--orange:#f97316;
+  --text:#1a2e1a;--text2:#4d7a4d;--border:#bbf7d0;
+  --tab-h:64px;--header-h:56px;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:linear-gradient(135deg,#16a34a,#059669);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:100;border-bottom:1px solid var(--border)}
+.header-title{font-size:20px;font-weight:900;color:#ff6eb4 !important;-webkit-text-fill-color:#ff6eb4 !important;background:none !important;text-shadow:0 1px 6px rgba(0,0,0,.3),-webkit-text-stroke:0.3px #d63384}
+.header-date{font-size:12px;color:rgba(255,255,255,.8)}
+.header-right{display:flex;gap:8px}
+.icon-btn{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;border-radius:8px;transition:.2s}
+.icon-btn:active{background:rgba(22,163,74,.12)}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:linear-gradient(135deg,#16a34a,#059669);border-top:1px solid var(--border);display:flex;z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:.2s;border:none;background:none;color:#ffffff;font-size:10px;padding:4px 0}
+.nav-item.active{color:#ffffff;font-weight:700}
+.nav-item .nav-icon{font-size:22px;transition:.2s}
+.nav-item.active .nav-icon{transform:scale(1.15)}
+
+/* PAGES */
+.pages{padding:calc(var(--header-h)+12px) 12px calc(var(--tab-h)+12px);min-height:100vh}
+.page{display:none}
+.page.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid var(--border)}
+.card-title{font-size:13px;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-title span{font-size:16px}
+
+/* TODAY SUMMARY */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sum-card{background:var(--card2);border-radius:14px;padding:14px;border:1px solid var(--border);text-align:center}
+.sum-icon{font-size:24px;margin-bottom:6px}
+.sum-value{font-size:22px;font-weight:700}
+.sum-label{font-size:11px;color:var(--text2);margin-top:2px}
+.sum-sub{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-top:6px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px}
+.progress-bar{height:6px;background:rgba(22,163,74,.15);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:.5s}
+
+/* CALENDAR */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav{background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:16px}
+.cal-month{font-size:18px;font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-day-name{font-size:11px;color:var(--text2);padding:6px 0;font-weight:600}
+.cal-day{padding:4px 2px;border-radius:8px;cursor:pointer;transition:.15s;position:relative;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px}
+.cal-day:hover{background:rgba(22,163,74,.08)}
+.cal-day.today{background:rgba(22,163,74,.25);border:1px solid var(--accent)}
+.cal-day.selected{background:var(--accent);color:#fff}
+.cal-day.selected .day-mini{color:rgba(255,255,255,.85)}
+.cal-day.other-month{opacity:.3}
+.cal-day .day-num{font-size:13px;font-weight:700;line-height:1.4}
+.cal-day .day-dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;margin:1px 0}
+.cal-day .dot{width:6px;height:6px;border-radius:50%}
+.cal-day .day-mini{font-size:9px;color:var(--accent);font-weight:600;line-height:1.2;text-align:center;white-space:nowrap}
+.sun{color:#ef4444}
+.sat{color:#3b82f6}
+
+/* MONTH SUMMARY */
+.month-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.ms-box{background:var(--card2);border-radius:10px;padding:8px 4px;text-align:center;border:1px solid var(--border)}
+.ms-val{font-size:14px;font-weight:800;color:var(--accent)}
+.ms-lab{font-size:9px;color:var(--text2);margin-top:2px}
+
+/* BOTTOM SHEET */
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end}
+.sheet-overlay.open{display:flex}
+.sheet-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:85vh;overflow-y:auto;padding:16px;animation:slideUp .28s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:#ddd;border-radius:99px;margin:0 auto 14px}
+
+/* DAY DETAIL */
+.day-detail{background:var(--card);border-radius:16px;padding:16px;margin-top:12px;border:1px solid var(--border)}
+.day-detail h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.detail-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.detail-row:last-child{border-bottom:none}
+.detail-icon{font-size:20px;width:32px;text-align:center}
+.detail-info{flex:1}
+.detail-info .di-label{font-size:12px;color:var(--text2)}
+.detail-info .di-value{font-size:15px;font-weight:600}
+
+/* FORMS */
+.form-group{margin-bottom:12px}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;transition:.2s}
+.form-input:focus{border-color:var(--accent)}
+.form-select{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;-webkit-appearance:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* BUTTONS */
+.btn{padding:12px 20px;border-radius:12px;border:none;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;width:100%}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-danger{background:rgba(239,68,68,.2);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
+.btn-sm{padding:7px 14px;font-size:12px;border-radius:8px;width:auto}
+
+/* LISTS */
+.list-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card2);border-radius:12px;margin-bottom:8px;border:1px solid var(--border)}
+.list-icon{font-size:22px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.list-body{flex:1;min-width:0}
+.list-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.list-amount{font-size:15px;font-weight:700;flex-shrink:0}
+.amount-in{color:var(--green)}
+.amount-out{color:var(--red)}
+
+/* TABS */
+.tab-bar{display:flex;background:var(--card2);border-radius:12px;padding:4px;margin-bottom:16px;border:1px solid var(--border)}
+.tab-btn{flex:1;padding:8px;border-radius:8px;border:none;background:none;color:var(--text2);font-size:13px;cursor:pointer;transition:.2s;font-weight:600}
+.tab-btn.active{background:var(--accent);color:#fff}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-end;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 16px;width:100%;max-height:90vh;overflow-y:auto;border-top:1px solid var(--border)}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 16px}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:20px;text-align:center}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-green{background:rgba(16,185,129,.2);color:var(--green)}
+.badge-red{background:rgba(239,68,68,.2);color:var(--red)}
+.badge-yellow{background:rgba(245,158,11,.2);color:var(--yellow)}
+.badge-blue{background:rgba(59,130,246,.2);color:var(--blue)}
+.badge-purple{background:rgba(22,163,74,.2);color:var(--accent2)}
+
+/* CHARTS */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 4px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-fill{width:100%;border-radius:6px 6px 0 0;min-height:4px;transition:.5s}
+.bar-label{font-size:9px;color:var(--text2)}
+.bar-value{font-size:9px;color:var(--text2)}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:8px;margin-bottom:12px}
+.stat-box{flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border)}
+.stat-box .sv{font-size:20px;font-weight:700}
+.stat-box .sl{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* FOOD SEARCH */
+.food-list{max-height:200px;overflow-y:auto;margin-top:8px}
+.food-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;cursor:pointer;border-bottom:1px solid var(--border)}
+.food-item:hover{background:rgba(22,163,74,.1)}
+.food-name{font-size:13px}
+.food-cal{font-size:12px;color:var(--text2)}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:16px;font-weight:700}
+
+/* CIRCLE PROGRESS */
+.circle-progress{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.circle-progress svg{transform:rotate(-90deg)}
+.circle-progress .cp-text{position:absolute;text-align:center}
+.cp-value{font-size:24px;font-weight:700;line-height:1}
+.cp-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:10px}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:99px;cursor:pointer;transition:.3s}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.toggle-slider{background:var(--accent)}
+input:checked+.toggle-slider:before{transform:translateX(20px)}
+
+/* GOLF SCORE */
+.hole-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;text-align:center;font-size:11px}
+.hole-cell{padding:4px 2px;border-radius:4px}
+.hole-cell.header{color:var(--text2);font-weight:600}
+.hole-cell.par{color:var(--text2)}
+.hole-cell.score-input{background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--text);outline:none;width:100%;text-align:center;padding:3px 0;font-size:12px}
+.hole-cell.birdie{background:rgba(16,185,129,.3);color:var(--green);border-radius:50%;font-weight:700}
+.hole-cell.eagle{background:rgba(16,185,129,.5);color:var(--green);border-radius:50%;font-weight:700}
+.hole-cell.bogey{background:rgba(239,68,68,.2);color:var(--red)}
+.hole-cell.dbl-bogey{background:rgba(239,68,68,.3);color:var(--red);font-weight:700}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty-text{font-size:14px}
+
+/* INSTALL BANNER */
+.install-banner{background:linear-gradient(135deg,rgba(22,163,74,.15),rgba(34,197,94,.1));border:1px solid rgba(22,163,74,.35);border-radius:14px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.install-banner .ib-icon{font-size:28px}
+.install-banner .ib-text{flex:1;font-size:13px}
+.install-banner .ib-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* NOTIFICATION DOT */
+.notif-dot{width:8px;height:8px;background:var(--red);border-radius:50%;position:absolute;top:0;right:0}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn .2s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal{animation:slideUp .3s ease}
+
+/* MIC BUTTON */
+.mic-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;font-size:18px;flex-shrink:0;transition:.2s;background:var(--card2);border:1px solid var(--border)}
+.mic-btn:active{transform:scale(.93)}
+.mic-btn.recording{background:rgba(239,68,68,.2);border-color:#ef4444;animation:micPulse 1s infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+.input-with-mic{display:flex;gap:8px;align-items:center}
+.input-with-mic .form-input{flex:1}
+.voice-result{font-size:12px;color:var(--accent2);margin-top:4px;min-height:16px;font-style:italic}
+
+/* PHOTO */
+.photo-picker-wrap{margin-bottom:12px}
+.photo-picker-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;background:var(--card2);border:1.5px dashed var(--border);border-radius:12px;cursor:pointer;color:var(--text2);font-size:13px;transition:.2s}
+.photo-picker-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.photo-preview-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.photo-preview{position:relative;width:72px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-preview .del-photo{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.photo-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid var(--border);cursor:pointer}
+.record-photos{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+
+/* CALENDAR PHOTO */
+.cal-photo-btns{display:flex;gap:8px;margin-bottom:12px}
+.cal-photo-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:.2s}
+.cal-photo-btn:active{transform:scale(.96)}
+.btn-camera{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.btn-album{background:linear-gradient(135deg,#3b1f6e,var(--accent));color:#fff}
+.cal-photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.cal-photo-item{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.cal-photo-item img{width:100%;height:100%;object-fit:cover;cursor:pointer}
+.cal-photo-item .del-photo{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.cal-photo-date-label{font-size:11px;color:var(--text2);margin-bottom:6px}
+.photo-count-badge{background:rgba(22,163,74,.2);color:var(--accent2);border-radius:99px;font-size:10px;padding:1px 6px;font-weight:700}
+
+/* ROUND COUNT BUTTONS */
+.round-count-btn{flex:1;background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:12px 8px;cursor:pointer;color:var(--text);text-align:center;transition:.2s}
+.round-count-btn.active{border-color:var(--green);background:rgba(16,185,129,.15)}
+.round-count-btn:active{transform:scale(.96)}
+
+/* DAY BADGE */
+.day-badge{display:inline-flex;align-items:center;padding:5px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--card2);border:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+
+/* MOOD CHIP */
+.mood-chip{padding:6px 12px;border-radius:99px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:12px;cursor:pointer;transition:.15s;white-space:nowrap}
+.mood-chip:active,.mood-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* BAECHIPYO */
+.baechipyo-item{position:relative;border-radius:12px;overflow:hidden;margin-bottom:8px;border:1px solid var(--border)}
+.baechipyo-item img{width:100%;display:block;max-height:300px;object-fit:contain;background:#111}
+.baechipyo-del{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.65);border:none;color:#fff;border-radius:99px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700}
+.baechipyo-date{font-size:11px;color:var(--text2);padding:6px 8px;background:var(--card2)}
+</style>
+<style id="googleidentityservice_button_styles">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:Roboto-Regular,arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{-webkit-transition:height .2s linear;transition:height .2s linear}.P1ekSe-ZMv3u>div:first-child{background-color:#1a73e8!important;-webkit-transition:width .3s linear;transition:width .3s linear}.P1ekSe-ZMv3u>div:nth-child(2){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:Google Sans,arial,sans-serif;font-size:14px;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;-webkit-flex-direction:row;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;-webkit-box-flex:1;flex-grow:1;font-family:Google Sans,arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;-webkit-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:focus,.nsm7Bb-HzV7m-LgbsSe:hover{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:Roboto;font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style></head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">✨ Only For Me</div>
+    <div class="header-date" id="headerDate">2026.04.21 (화)</div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" onclick="showSettings()">⚙️</button>
+    <button class="icon-btn" id="installBtn" style="" onclick="installApp()">📲</button>
+  </div>
+</div>
+
+<!-- PAGES -->
+<div class="pages">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div id="installBannerWrap">
+    <div class="install-banner">
+      <div class="ib-icon">📱</div>
+      <div class="ib-text"><strong>앱으로 설치하기</strong><br>홈 화면에 추가하면 언제든지 빠르게 열 수 있어요</div>
+      <button class="ib-btn" onclick="installApp()">설치</button>
+    </div></div>
+    <div class="card">
+      <div class="card-title"><span>☀️</span> 오늘의 요약</div>
+      <div class="summary-grid">
+        <div class="sum-card">
+          <div class="sum-icon">👟</div>
+          <div class="sum-value" id="home-steps">0</div>
+          <div class="sum-label">걸음수</div>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" id="steps-bar" style="background:var(--blue);width:0%"></div></div>
+          </div>
+          <div class="sum-sub" id="steps-goal-text">목표 10,000보 (0%)</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">🔥</div>
+          <div class="sum-value" id="home-cal">0</div>
+          <div class="sum-label">칼로리 (kcal)</div>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" id="cal-bar" style="background:var(--orange);width:0%"></div></div>
+          </div>
+          <div class="sum-sub" id="cal-goal-text">목표 2,000kcal (0%)</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">💰</div>
+          <div class="sum-value amount-in" id="home-income">150,000</div>
+          <div class="sum-label">수입 (원)</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-icon">💸</div>
+          <div class="sum-value amount-out" id="home-expense">0</div>
+          <div class="sum-label">지출 (원)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📅</span> 이번 달 통계</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv" id="home-monthly-income">150,000</div><div class="sl">월 수입</div></div>
+        <div class="stat-box"><div class="sv" id="home-monthly-expense">0</div><div class="sl">월 지출</div></div>
+        <div class="stat-box"><div class="sv" id="home-monthly-balance" style="color:var(--green)">150,000</div><div class="sl">잔액</div></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv" style="color:var(--blue)" id="home-avg-steps">0</div><div class="sl">평균 걸음수</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--orange)" id="home-avg-cal">0</div><div class="sl">평균 칼로리</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--accent2)" id="home-rounds">0</div><div class="sl">골프 라운딩</div></div>
+      </div>
+    </div>
+
+    <!-- 하루 기록 -->
+    <div class="card">
+      <div class="card-title"><span>📝</span> 하루 기록</div>
+
+      <!-- 상단 요약 배지 -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px">
+        <div class="day-badge" id="badge-rounds">⛳ 라운딩 0회</div>
+        <div class="day-badge" id="badge-income">💰 0만원</div>
+        <div class="day-badge" id="badge-cal">🔥 0kcal</div>
+        <div class="day-badge" id="badge-mood">😊 -</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">🌅 기상 시간</label>
+          <select class="form-select" id="daily-wake" onchange="saveDailyRecord()">
+            <option value="">선택</option>
+            ${Array.from({length:24},(_,i)=&gt;{
+              const h = i; const label = h&lt;12?`오전 ${h===0?12:h}:00`:`오후 ${h===12?12:h-12}:00`;
+              return `<option value="${String(h).padStart(2,&#39;0&#39;)}:00">${label}</option>`;
+            }).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🌙 취침 시간</label>
+          <select class="form-select" id="daily-sleep" onchange="saveDailyRecord()">
+            <option value="">선택</option>
+            ${Array.from({length:24},(_,i)=&gt;{
+              const h = i; const label = h&lt;12?`오전 ${h===0?12:h}:00`:`오후 ${h===12?12:h-12}:00`;
+              return `<option value="${String(h).padStart(2,&#39;0&#39;)}:00">${label}</option>`;
+            }).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">💪 몸 상태</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          ${['최고야! 🔥','좋아 😊','보통이야 😐','피곤해 😩','아파 🤒'].map(s=&gt;`
+            <button class="mood-chip" onclick="setBodyState(&#39;${s}&#39;)">${s}</button>`).join('')}
+        </div>
+        <div class="input-with-mic">
+          <input class="form-input" type="text" id="daily-body" placeholder="직접 입력..." onchange="saveDailyRecord()">
+          <button class="mic-btn" onclick="startVoice(&#39;daily-body&#39;,&#39;daily-body&#39;)">🎤</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">📖 한마디</label>
+        <div class="input-with-mic">
+          <textarea class="form-input" id="daily-diary" rows="2" placeholder="오늘 하루 한마디..." oninput="saveDailyRecord()" style="resize:none"></textarea>
+          <button class="mic-btn" onclick="startVoice(&#39;daily-diary&#39;,&#39;daily-diary&#39;)">🎤</button>
+        </div>
+      </div>
+
+      <div style="text-align:right;font-size:11px;color:var(--text2)" id="daily-saved-time"></div>
+    </div>
+
+    <!-- 캐디 배치표 -->
+    <div class="card">
+      <div class="card-title"><span>🗒️</span> 캐디 배치표</div>
+      <div style="background:linear-gradient(135deg,#bbf7d0,#d1fae5);border-radius:14px;padding:16px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:24px">📸</span>
+          <div>
+            <div style="font-size:14px;font-weight:700">배치표 사진 찍기</div>
+            <div style="font-size:11px;color:#93c5fd;margin-top:2px">배치표를 카메라로 찍으면<br>내용이 바로 저장돼요!</div>
+          </div>
+        </div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f59e0b;color:#1a1a1a;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;width:100%">
+          📷 사진 찍기 / 불러오기
+          <input type="file" accept="image/*" multiple="" style="display:none" onchange="addBaechipyo(this)">
+        </label>
+      </div>
+      <div id="baechipyo-list"><div style="color:var(--text2);font-size:12px;text-align:center;padding:12px">배치표 사진이 없어요</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <div class="card-title" style="margin:0"><span>📋</span> 최근 기록</div>
+      </div>
+      <div id="home-recent"><div class="list-item">
+      <div class="list-icon" style="background:rgba(22,163,74,.15)">📅</div>
+      <div class="list-body">
+        <div class="list-title">2026.04.21 (화)</div>
+        <div class="list-sub">
+          👟 0 · 🔥 0kcal
+           · 💰 +150,000
+        </div>
+      </div>
+    </div></div>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="page" id="page-photos">
+    <div class="card" style="padding:12px">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+        <label class="btn btn-primary" style="flex:1;text-align:center;cursor:pointer">
+          📷 사진 찍기
+          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addGalleryPhoto(this)">
+        </label>
+        <label class="btn btn-secondary" style="flex:1;text-align:center;cursor:pointer">
+          🖼️ 앨범에서
+          <input type="file" accept="image/*" multiple="" style="display:none" onchange="addGalleryPhoto(this)">
+        </label>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="form-input" type="date" id="gallery-date" style="flex:1">
+        <span style="font-size:12px;color:var(--text2)">날짜 선택 후 저장</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📸</span> 내 사진 모음</div>
+      <div id="photo-gallery-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="page" id="page-calendar">
+
+    <!-- 날짜 검색 -->
+    <div class="card" style="padding:12px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="form-input" type="date" id="cal-search-date" style="flex:1" onchange="jumpToDate(this.value)">
+        <button class="btn btn-primary btn-sm" onclick="jumpToDate(document.getElementById(&#39;cal-search-date&#39;).value)">
+          🔍 이동
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="jumpToDate(today())">
+          오늘
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-month" id="calMonthLabel"></div>
+        <button class="cal-nav" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calDayNames"></div>
+      <div class="cal-grid" id="calGrid" style="gap:4px;margin-top:4px"></div>
+      <!-- 점 범례 -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block"></span>라운딩</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block"></span>식단</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block"></span>기분</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:#3b82f6;display:inline-block"></span>기상</span>
+      </div>
+    </div>
+
+    <!-- 이번 달 요약 -->
+    <div class="card" id="calMonthlySummary"></div>
+
+    <div id="calDayDetail"></div>
+  </div>
+
+  <!-- 날짜 바텀시트 -->
+  <div class="sheet-overlay" id="daySheet" onclick="closeDaySheet(event)">
+    <div class="sheet-box">
+      <div class="sheet-handle"></div>
+      <div id="sheetContent"></div>
+    </div>
+  </div>
+
+  <!-- 가계부 -->
+  <div class="page" id="page-finance">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="setFinanceTab(&#39;list&#39;,this)">내역</button>
+      <button class="tab-btn" onclick="setFinanceTab(&#39;add&#39;,this)">기록하기</button>
+      <button class="tab-btn" onclick="setFinanceTab(&#39;stats&#39;,this)">통계</button>
+    </div>
+
+    <!-- 내역 -->
+    <div id="finance-list">
+      <div class="card">
+        <div class="stats-row">
+          <div class="stat-box"><div class="sv amount-in" id="fin-month-in">0</div><div class="sl">이번달 수입</div></div>
+          <div class="stat-box"><div class="sv amount-out" id="fin-month-out">0</div><div class="sl">이번달 지출</div></div>
+        </div>
+        <div style="text-align:center">
+          <span style="font-size:13px;color:var(--text2)">잔액: </span>
+          <span style="font-size:18px;font-weight:700" id="fin-balance">0</span>원
+        </div>
+      </div>
+      <div id="finance-items"></div>
+    </div>
+
+    <!-- 기록 -->
+    <div id="finance-add" style="display:none">
+      <div class="card">
+        <div class="tab-bar" style="margin-bottom:16px">
+          <button class="tab-btn active" id="fin-type-in" onclick="setFinType(&#39;income&#39;,this)">💰 수입</button>
+          <button class="tab-btn" id="fin-type-out" onclick="setFinType(&#39;expense&#39;,this)">💸 지출</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">금액 (원)</label>
+          <input class="form-input" type="number" id="fin-amount" placeholder="0" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label">카테고리</label>
+          <select class="form-select" id="fin-category">
+            <option value="식비">🍚 식비</option>
+            <option value="교통">🚗 교통</option>
+            <option value="쇼핑">🛍️ 쇼핑</option>
+            <option value="의료">💊 의료</option>
+            <option value="문화">🎬 문화/여가</option>
+            <option value="골프">⛳ 골프</option>
+            <option value="급여">💼 급여</option>
+            <option value="부업">💡 부업</option>
+            <option value="기타">📦 기타</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">날짜</label>
+            <input class="form-input" type="date" id="fin-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">결제수단</label>
+            <select class="form-select" id="fin-method">
+              <option>카드</option><option>현금</option><option>계좌이체</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">메모 🎤 말해도 돼요</label>
+          <div class="input-with-mic">
+            <input class="form-input" type="text" id="fin-memo" placeholder="메모 (선택)">
+            <button class="mic-btn" onclick="startVoice(&#39;fin-memo&#39;,&#39;fin-memo&#39;)">🎤</button>
+          </div>
+        </div>
+        <!-- 빠른 라운딩 입력 -->
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:#16a34a;margin-bottom:8px">⛳ 캐디 라운딩 빠른 입력</div>
+          <div style="display:flex;gap:6px;margin-bottom:8px">
+            <button class="btn btn-secondary" style="flex:1;font-size:13px" onclick="quickRounding(1)">1회 +15만원</button>
+            <button class="btn btn-secondary" style="flex:1;font-size:13px" onclick="quickRounding(2)">2회 +30만원</button>
+          </div>
+          <div style="display:flex;gap:6px">
+            <input class="form-input" type="number" id="quick-tip" placeholder="팁 금액 (선택)" inputmode="numeric" style="flex:1">
+            <button class="btn" style="background:#f59e0b;color:#fff;border-radius:10px;padding:0 12px" onclick="quickTip()">팁 추가</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveFinance()" style="width:100%">💾 저장하기</button>
+      </div>
+    </div>
+
+    <!-- 통계 -->
+    <div id="finance-stats" style="display:none">
+      <div class="card">
+        <div class="card-title"><span>📊</span> 월별 지출 추이</div>
+        <div class="bar-chart" id="fin-monthly-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🍩</span> 카테고리별 지출</div>
+        <div id="fin-category-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 칼로리 -->
+  <div class="page" id="page-calorie">
+    <div class="card" style="text-align:center">
+      <div class="card-title" style="justify-content:center"><span>🔥</span> 오늘 칼로리</div>
+      <div style="display:flex;justify-content:center;margin-bottom:16px">
+        <div class="circle-progress">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="12"></circle>
+            <circle cx="70" cy="70" r="58" fill="none" stroke="url(#calGrad)" stroke-width="12" stroke-dasharray="364.4" stroke-dashoffset="364.4" stroke-linecap="round" id="calCircle"></circle>
+            <defs><lineargradient id="calGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#f97316"></stop>
+              <stop offset="100%" style="stop-color:#ef4444"></stop>
+            </lineargradient></defs>
+          </svg>
+          <div class="cp-text">
+            <div class="cp-value" id="cal-eaten">0</div>
+            <div class="cp-label">/ <span id="cal-goal-num">2000</span> kcal</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-row" style="margin-bottom:0">
+        <div class="stat-box"><div class="sv" style="color:var(--green)" id="cal-remain">2000</div><div class="sl">남은 칼로리</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--orange)" id="cal-foods-count">0</div><div class="sl">오늘 음식수</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">오늘 먹은 것</div>
+        <button class="btn btn-primary btn-sm" onclick="openAddFood()">+ 추가</button>
+      </div>
+      <div id="cal-food-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📈</span> 최근 7일 칼로리</div>
+      <div class="bar-chart" id="cal-weekly-chart"></div>
+    </div>
+  </div>
+
+  <!-- 걸음수 -->
+  <div class="page" id="page-steps">
+    <div class="card" style="text-align:center">
+      <div class="card-title" style="justify-content:center"><span>👟</span> 오늘 걸음수</div>
+      <div style="display:flex;justify-content:center;margin-bottom:16px">
+        <div class="circle-progress">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="12"></circle>
+            <circle cx="70" cy="70" r="58" fill="none" stroke="url(#stepsGrad)" stroke-width="12" stroke-dasharray="364.4" stroke-dashoffset="364.4" stroke-linecap="round" id="stepsCircle"></circle>
+            <defs><lineargradient id="stepsGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#3b82f6"></stop>
+              <stop offset="100%" style="stop-color:#8b5cf6"></stop>
+            </lineargradient></defs>
+          </svg>
+          <div class="cp-text">
+            <div class="cp-value" id="steps-today">0</div>
+            <div class="cp-label">/ <span id="steps-goal-num">10000</span> 보</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-row" style="margin-bottom:16px">
+        <div class="stat-box"><div class="sv" style="color:var(--blue)" id="steps-km">0.0</div><div class="sl">km</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--green)" id="steps-burned">0</div><div class="sl">소모 kcal</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--yellow)" id="steps-pct">0</div><div class="sl">달성 %</div></div>
+      </div>
+      <!-- 만보계 상태 -->
+      <div id="pedometer-box" style="margin-top:12px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:14px;padding:14px;text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">👟</div>
+        <div id="pedo-count" style="font-size:32px;font-weight:900;color:#16a34a">0</div>
+        <div style="font-size:12px;color:#4d7a4d;margin-bottom:10px">앱 켜져 있는 동안 자동 측정</div>
+        <div style="display:flex;gap:8px;justify-content:center">
+          <button class="btn btn-primary" id="pedo-btn" onclick="togglePedometer()" style="flex:1">
+            🏃 측정 시작
+          </button>
+          <button class="btn btn-secondary" onclick="savePedometerSteps()" style="flex:1">
+            💾 오늘 기록 저장
+          </button>
+        </div>
+        <div id="pedo-status" style="font-size:11px;color:#4d7a4d;margin-top:8px"></div>
+      </div>
+      <button class="btn btn-secondary" onclick="openAddSteps()" style="margin-top:8px;width:100%">✏️ 직접 입력</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📈</span> 최근 7일 걸음수</div>
+      <div class="bar-chart" id="steps-weekly-chart"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🏆</span> 이달의 기록</div>
+      <div class="stats-row" style="margin-bottom:0">
+        <div class="stat-box"><div class="sv" id="steps-month-avg">0</div><div class="sl">일평균</div></div>
+        <div class="stat-box"><div class="sv" id="steps-month-max">0</div><div class="sl">최고기록</div></div>
+        <div class="stat-box"><div class="sv" id="steps-month-days">0</div><div class="sl">목표달성일</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 골프 -->
+  <div class="page" id="page-golf">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="setGolfTab(&#39;list&#39;,this)">라운딩 기록</button>
+      <button class="tab-btn" onclick="setGolfTab(&#39;add&#39;,this)">새 라운딩</button>
+      <button class="tab-btn" onclick="setGolfTab(&#39;clubs&#39;,this)">클럽 관리</button>
+    </div>
+
+    <!-- 라운딩 목록 -->
+    <div id="golf-list">
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv" style="color:var(--accent2)" id="golf-total">0</div><div class="sl">총 라운딩 수</div></div>
+        <div class="stat-box"><div class="sv amount-in" id="golf-month-income">0</div><div class="sl">이달 수당</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--yellow)" id="golf-month-tip">0</div><div class="sl">이달 팁</div></div>
+      </div>
+      <div id="golf-rounds-list"></div>
+    </div>
+
+    <!-- 새 라운딩 -->
+    <div id="golf-add" style="display:none">
+      <div class="card">
+
+        <!-- 💰 수당 계산 박스 -->
+        <div style="background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(5,150,105,.1));border:1px solid rgba(16,185,129,.3);border-radius:14px;padding:14px;margin-bottom:16px">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">💰 오늘 수당 자동 계산</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:8px">라운딩 횟수</div>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <button class="round-count-btn active" id="rounds-1" onclick="setRoundCount(1)">
+              <div style="font-size:22px">1️⃣</div>
+              <div style="font-size:12px;font-weight:700">1회</div>
+              <div style="font-size:11px;color:var(--green)">150,000원</div>
+            </button>
+            <button class="round-count-btn" id="rounds-2" onclick="setRoundCount(2)">
+              <div style="font-size:22px">2️⃣</div>
+              <div style="font-size:12px;font-weight:700">2회</div>
+              <div style="font-size:11px;color:var(--green)">300,000원</div>
+            </button>
+          </div>
+          <!-- 팁 -->
+          <div style="background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.2);border-radius:10px;padding:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:18px">💝</span>
+                <span style="font-size:13px;font-weight:700">팁 받음</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="tip-toggle" onchange="toggleTip(this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div id="tip-input-wrap" style="display:none">
+              <input class="form-input" type="number" id="tip-amount" placeholder="팁 금액 입력" inputmode="numeric" oninput="updatePaySummary()" style="margin-bottom:0">
+            </div>
+          </div>
+          <!-- 합계 -->
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:13px;color:var(--text2)">오늘 총 수입</span>
+            <span style="font-size:22px;font-weight:800;color:var(--green)" id="pay-total">150,000원</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">날짜</label>
+            <input class="form-input" type="date" id="golf-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">골프장</label>
+            <input class="form-input" type="text" id="golf-course" placeholder="골프장 이름">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">담당 팀명</label>
+            <input class="form-input" type="text" id="golf-partner" placeholder="단체명 or 내장객">
+          </div>
+          <div class="form-group">
+            <label class="form-label">날씨</label>
+            <select class="form-select" id="golf-weather">
+              <option>☀️ 맑음</option><option>⛅ 흐림</option><option>🌧️ 비</option><option>💨 바람</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">기분 / 메모 <span style="color:var(--text2);font-weight:400">(마이크로 말해보세요)</span></label>
+          <div class="input-with-mic">
+            <input class="form-input" type="text" id="golf-memo" placeholder="동반자 특징, 오늘 기분, 한 줄 평...">
+            <button class="mic-btn" id="mic-golf-memo" onclick="startVoice(&#39;golf-memo&#39;,&#39;golf-memo&#39;)" title="음성 메모">🎤</button>
+          </div>
+          <div class="voice-result" id="voice-result-golf"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">동반자 특징 메모</label>
+          <div class="input-with-mic">
+            <input class="form-input" type="text" id="golf-people" placeholder="동반자 성격, 플레이 스타일...">
+            <button class="mic-btn" id="mic-golf-people" onclick="startVoice(&#39;golf-people&#39;,&#39;golf-people&#39;)" title="동반자 음성 메모">🎤</button>
+          </div>
+        </div>
+        <!-- 라운딩 사진 -->
+        <div class="photo-picker-wrap">
+          <label class="form-label">사진 (앨범에서 불러오기)</label>
+          <label class="photo-picker-btn">
+            <span>📸</span><span>앨범에서 사진 선택</span>
+            <input type="file" accept="image/*" multiple="" style="display:none" onchange="handleGolfPhotos(this)">
+          </label>
+          <div class="photo-preview-wrap" id="golf-photo-preview"></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveGolfRound()">저장하기</button>
+      </div>
+    </div>
+
+    <!-- 클럽 관리 -->
+    <div id="golf-clubs" style="display:none">
+      <div class="card">
+        <div class="section-header">
+          <div class="section-title">내 클럽 목록</div>
+          <button class="btn btn-primary btn-sm" onclick="openAddClub()">+ 추가</button>
+        </div>
+        <div id="club-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 리포트 -->
+  <div class="page" id="page-report">
+    <div class="card">
+      <div class="cal-header" style="margin-bottom:12px">
+        <button class="cal-nav" onclick="changeReportMonth(-1)">‹</button>
+        <div class="cal-month" id="reportMonthLabel"></div>
+        <button class="cal-nav" onclick="changeReportMonth(1)">›</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv amount-in" id="rpt-income">0</div><div class="sl">수입</div></div>
+        <div class="stat-box"><div class="sv amount-out" id="rpt-expense">0</div><div class="sl">지출</div></div>
+        <div class="stat-box"><div class="sv" id="rpt-balance">0</div><div class="sl">잔액</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>💰</span> 지출 카테고리</div>
+      <div id="rpt-category"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>👟</span> 걸음수/칼로리 현황</div>
+      <div class="stats-row" style="margin-bottom:0">
+        <div class="stat-box"><div class="sv" id="rpt-avg-steps">0</div><div class="sl">평균 걸음수</div></div>
+        <div class="stat-box"><div class="sv" id="rpt-avg-cal">0</div><div class="sl">평균 칼로리</div></div>
+        <div class="stat-box"><div class="sv" id="rpt-golf-rounds">0</div><div class="sl">골프 라운딩</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📆</span> 일별 기록</div>
+      <div id="rpt-daily-list" style="max-height:300px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+</div><!-- /pages -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage(&#39;home&#39;,this)">
+    <span class="nav-icon">🏠</span><span>홈</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;calendar&#39;,this)">
+    <span class="nav-icon">📅</span><span>달력</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;finance&#39;,this)">
+    <span class="nav-icon">💰</span><span>가계부</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;calorie&#39;,this)">
+    <span class="nav-icon">🔥</span><span>칼로리</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;steps&#39;,this)">
+    <span class="nav-icon">👟</span><span>걸음수</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;golf&#39;,this)">
+    <span class="nav-icon">⛳</span><span>골프</span>
+  </button>
+  <button class="nav-item" onclick="showPage(&#39;photos&#39;,this)">
+    <span class="nav-icon">📸</span><span>사진</span>
+  </button>
+</nav>
+
+<!-- MODALS -->
+
+<!-- Add Food -->
+<div class="modal-overlay" id="modal-food">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🍽️ 음식 추가</div>
+    <div class="form-group">
+      <div class="input-with-mic">
+        <input class="form-input" type="text" id="food-search" placeholder="음식 이름 검색..." oninput="searchFood(this.value)">
+        <button class="mic-btn" id="mic-food-search" onclick="startVoice(&#39;food-search&#39;,&#39;food-search&#39;)" title="마이크로 검색">🎤</button>
+      </div>
+    </div>
+    <div class="food-list" id="food-results"></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">음식 이름</label>
+          <div class="input-with-mic">
+            <input class="form-input" type="text" id="food-name-input" placeholder="직접 입력">
+            <button class="mic-btn" id="mic-food-name" onclick="startVoice(&#39;food-name-input&#39;,&#39;food-name&#39;)" title="마이크로 입력">🎤</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">칼로리 (kcal)</label>
+          <input class="form-input" type="number" id="food-cal-input" placeholder="0" inputmode="numeric">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">식사 시간</label>
+          <select class="form-select" id="food-meal">
+            <option>🌅 아침</option><option>☀️ 점심</option><option>🌙 저녁</option><option>🍫 간식</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">날짜</label>
+          <input class="form-input" type="date" id="food-date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">기분 / 메모</label>
+        <div class="input-with-mic">
+          <input class="form-input" type="text" id="food-mood" placeholder="오늘 기분이나 메모를 말해보세요 🎤">
+          <button class="mic-btn" id="mic-food-mood" onclick="startVoice(&#39;food-mood&#39;,&#39;food-mood&#39;)" title="기분 음성 입력">🎤</button>
+        </div>
+        <div class="voice-result" id="voice-result-food"></div>
+      </div>
+      <!-- 사진 첨부 -->
+      <div class="photo-picker-wrap">
+        <label class="form-label">사진 첨부 (앨범에서 불러오기)</label>
+        <label class="photo-picker-btn">
+          <span>📸</span><span>앨범에서 사진 선택</span>
+          <input type="file" accept="image/*" multiple="" style="display:none" onchange="handleFoodPhotos(this)">
+        </label>
+        <div class="photo-preview-wrap" id="food-photo-preview"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1" onclick="closeModal(&#39;modal-food&#39;)">취소</button>
+        <button class="btn btn-primary" style="flex:1" onclick="saveFood()">추가</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Steps -->
+<div class="modal-overlay" id="modal-steps">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👟 걸음수 입력</div>
+    <div class="form-group">
+      <label class="form-label">날짜</label>
+      <input class="form-input" type="date" id="steps-date-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">걸음수</label>
+      <input class="form-input" type="number" id="steps-count-input" placeholder="0" inputmode="numeric">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal(&#39;modal-steps&#39;)">취소</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveSteps()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Club -->
+<div class="modal-overlay" id="modal-club">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⛳ 클럽 추가</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">클럽 이름</label>
+        <input class="form-input" type="text" id="club-name" placeholder="예: 드라이버">
+      </div>
+      <div class="form-group">
+        <label class="form-label">브랜드</label>
+        <input class="form-input" type="text" id="club-brand" placeholder="브랜드">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">평균 거리 (m)</label>
+        <input class="form-input" type="number" id="club-dist" placeholder="0" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label class="form-label">구입일</label>
+        <input class="form-input" type="date" id="club-date">
+      </div>
+    </div>
+    <!-- 사진 -->
+    <div class="form-group">
+      <label class="form-label">📷 클럽 사진</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <label style="flex:1;background:#16a34a;color:#fff;border-radius:10px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:600">
+          📷 사진 찍기
+          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="previewClubPhoto(this)">
+        </label>
+        <label style="flex:1;background:#4d7a4d;color:#fff;border-radius:10px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:600">
+          🖼️ 앨범에서
+          <input type="file" accept="image/*" style="display:none" onchange="previewClubPhoto(this)">
+        </label>
+      </div>
+      <div id="club-photo-preview" style="display:none;position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+        <img id="club-photo-img" style="width:100%;height:100%;object-fit:cover">
+        <button onclick="clearClubPhoto()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:24px;height:24px;font-size:13px;cursor:pointer">✕</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal(&#39;modal-club&#39;)">취소</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveClub()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings -->
+<div class="modal-overlay" id="modal-settings">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚙️ 설정</div>
+    <div class="form-group">
+      <label class="form-label">닉네임</label>
+      <input class="form-input" type="text" id="set-name" placeholder="내 이름">
+    </div>
+    <div class="form-group">
+      <label class="form-label">일일 걸음수 목표</label>
+      <input class="form-input" type="number" id="set-step-goal" inputmode="numeric">
+    </div>
+    <div class="form-group">
+      <label class="form-label">일일 칼로리 목표 (kcal)</label>
+      <input class="form-input" type="number" id="set-cal-goal" inputmode="numeric">
+    </div>
+    <div class="form-group">
+      <label class="form-label">몸무게 (kg) — 걸음수 칼로리 계산용</label>
+      <input class="form-input" type="number" id="set-weight" inputmode="numeric">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal(&#39;modal-settings&#39;)">취소</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveSettings()">저장</button>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="btn btn-danger" onclick="exportData()">📤 데이터 내보내기</button>
+      <div style="height:8px"></div>
+      <label class="btn btn-secondary" style="display:block;text-align:center;cursor:pointer">
+        📥 데이터 가져오기
+        <input type="file" accept=".json" style="display:none" onchange="importData(this)">
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// 🎤 VOICE INPUT (Web Speech API)
+// ═══════════════════════════════════════════
+let recognition = null;
+let activeVoiceTarget = null;
+let activeMicBtn = null;
+
+function startVoice(targetInputId, micKey) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('이 브라우저는 음성 입력을 지원하지 않아요.\nChrome 브라우저를 사용해주세요! 🙏');
+    return;
+  }
+
+  // 이미 녹음 중이면 중지
+  const micBtn = document.getElementById('mic-' + micKey);
+  if (recognition && activeVoiceTarget === targetInputId) {
+    recognition.stop();
+    return;
+  }
+  if (recognition) recognition.abort();
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'ko-KR';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+  activeVoiceTarget = targetInputId;
+  activeMicBtn = micBtn;
+
+  if (micBtn) { micBtn.classList.add('recording'); micBtn.textContent = '🔴'; }
+
+  // 결과 표시 영역 찾기 (food-mood → voice-result-food, golf-memo/golf-people → voice-result-golf)
+  const resultKey = micKey.startsWith('food') ? 'food' : micKey.startsWith('golf') ? 'golf' : null;
+  const resultEl = resultKey ? document.getElementById('voice-result-' + resultKey) : null;
+  if (resultEl) resultEl.textContent = '🎤 듣는 중...';
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    const input = document.getElementById(targetInputId);
+    if (input) input.value = transcript;
+    if (resultEl) resultEl.textContent = e.results[0].isFinal ? '✅ ' + transcript : '🎤 ' + transcript;
+    // 음식 검색창이면 자동 검색
+    if (targetInputId === 'food-search') searchFood(transcript);
+  };
+
+  recognition.onend = () => {
+    if (micBtn) { micBtn.classList.remove('recording'); micBtn.textContent = '🎤'; }
+    if (resultEl && resultEl.textContent === '🎤 듣는 중...') resultEl.textContent = '';
+    recognition = null; activeVoiceTarget = null; activeMicBtn = null;
+  };
+
+  recognition.onerror = (e) => {
+    if (micBtn) { micBtn.classList.remove('recording'); micBtn.textContent = '🎤'; }
+    if (resultEl) resultEl.textContent = e.error === 'not-allowed' ? '❌ 마이크 권한을 허용해주세요' : '❌ 다시 시도해주세요';
+    recognition = null; activeVoiceTarget = null; activeMicBtn = null;
+  };
+
+  recognition.start();
+}
+
+// ═══════════════════════════════════════════
+// 📸 PHOTO HANDLING
+// ═══════════════════════════════════════════
+let foodPhotos = [];   // base64 배열
+let golfPhotos = [];
+
+function compressPhoto(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxSize = 600;
+        let w = img.width, h = img.height;
+        if (w > h && w > maxSize) { h = h * maxSize / w; w = maxSize; }
+        else if (h > maxSize) { w = w * maxSize / h; h = maxSize; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function handleFoodPhotos(input) {
+  const files = Array.from(input.files);
+  const preview = document.getElementById('food-photo-preview');
+  Promise.all(files.map(compressPhoto)).then(results => {
+    foodPhotos = [...foodPhotos, ...results];
+    renderPhotoPreview(preview, foodPhotos, 'food');
+  });
+  input.value = '';
+}
+
+function handleGolfPhotos(input) {
+  const files = Array.from(input.files);
+  const preview = document.getElementById('golf-photo-preview');
+  Promise.all(files.map(compressPhoto)).then(results => {
+    golfPhotos = [...golfPhotos, ...results];
+    renderPhotoPreview(preview, golfPhotos, 'golf');
+  });
+  input.value = '';
+}
+
+function renderPhotoPreview(container, photos, type) {
+  container.innerHTML = photos.map((src, i) => `
+    <div class="photo-preview">
+      <img src="${src}" onclick="viewPhoto('${src}')">
+      <button class="del-photo" onclick="removePhoto('${type}',${i})">✕</button>
+    </div>`).join('');
+}
+
+function removePhoto(type, idx) {
+  if (type === 'food') {
+    foodPhotos.splice(idx, 1);
+    renderPhotoPreview(document.getElementById('food-photo-preview'), foodPhotos, 'food');
+  } else {
+    golfPhotos.splice(idx, 1);
+    renderPhotoPreview(document.getElementById('golf-photo-preview'), golfPhotos, 'golf');
+  }
+}
+
+function viewPhoto(src) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer';
+  overlay.innerHTML = `<img src="${src}" style="max-width:95vw;max-height:90vh;border-radius:12px;object-fit:contain">`;
+  overlay.onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+}
+
+// ═══════════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════════
+const DB_KEY = 'onlyforme_v1';
+
+function loadDB() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || {}; } catch { return {}; }
+}
+function saveDB(db) {
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+function getDay(db, date) {
+  if (!db.days) db.days = {};
+  if (!db.days[date]) db.days[date] = { steps: 0, foods: [], finance: [] };
+  return db.days[date];
+}
+function getSettings(db) {
+  if (!db.settings) db.settings = { name: '나', stepGoal: 10000, calGoal: 2000, weight: 65 };
+  return db.settings;
+}
+function getGolf(db) {
+  if (!db.golf) db.golf = { rounds: [], clubs: [] };
+  return db.golf;
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+const today = () => new Date().toISOString().slice(0, 10);
+const todayObj = () => new Date();
+const fmt = (n) => n.toLocaleString('ko-KR');
+const fmtDate = (d) => d.replace(/-/g, '.');
+const dayOfWeek = ['일','월','화','수','목','금','토'];
+
+function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+function getDayCalories(day) {
+  return (day.foods || []).reduce((s, f) => s + (f.cal || 0), 0);
+}
+function getDayIncome(day) {
+  return (day.finance || []).filter(f => f.type === 'income').reduce((s, f) => s + f.amount, 0);
+}
+function getDayExpense(day) {
+  return (day.finance || []).filter(f => f.type === 'expense').reduce((s, f) => s + f.amount, 0);
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+
+  // refresh on open
+  if (name === 'home') renderHome();
+  if (name === 'calendar') {
+    document.getElementById('cal-search-date').value = calSelected || today();
+    renderCalendar();
+  }
+  if (name === 'finance') renderFinance();
+  if (name === 'calorie') renderCalorie();
+  if (name === 'steps') { renderSteps(); autoPedometerStart(); }
+  if (name === 'golf') renderGolf();
+  if (name === 'report') renderReport();
+  if (name === 'photos') renderPhotoGallery();
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// 하루 기록 (기상/취침/몸상태/한마디)
+// ═══════════════════════════════════════════
+function saveDailyRecord() {
+  const db = loadDB();
+  const day = getDay(db, today());
+  day.wakeTime  = document.getElementById('daily-wake').value;
+  day.sleepTime = document.getElementById('daily-sleep').value;
+  day.bodyState = document.getElementById('daily-body').value;
+  day.diary     = document.getElementById('daily-diary').value;
+  saveDB(db);
+  const now = new Date();
+  document.getElementById('daily-saved-time').textContent =
+    `✅ ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')} 저장됨`;
+}
+
+function setBodyState(val) {
+  document.getElementById('daily-body').value = val;
+  document.querySelectorAll('.mood-chip').forEach(c =>
+    c.classList.toggle('active', c.textContent.trim() === val.trim()));
+  saveDailyRecord();
+}
+
+function loadDailyRecord() {
+  const db = loadDB();
+  const day = getDay(db, today());
+  document.getElementById('daily-wake').value  = day.wakeTime  || '';
+  document.getElementById('daily-sleep').value = day.sleepTime || '';
+  document.getElementById('daily-body').value  = day.bodyState || '';
+  document.getElementById('daily-diary').value = day.diary     || '';
+  // 몸상태 칩 활성화
+  const bs = day.bodyState || '';
+  document.querySelectorAll('.mood-chip').forEach(c =>
+    c.classList.toggle('active', c.textContent.trim() === bs.trim()));
+}
+
+// ── 배치표 ──
+function addBaechipyo(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  Promise.all(files.map(compressPhoto)).then(imgs => {
+    const db = loadDB();
+    if (!db.baechipyo) db.baechipyo = [];
+    imgs.forEach(src => db.baechipyo.unshift({ id: Date.now() + Math.random(), date: today(), src }));
+    saveDB(db);
+    renderBaechipyo();
+  });
+  input.value = '';
+}
+
+function renderBaechipyo() {
+  const db = loadDB();
+  const list = db.baechipyo || [];
+  const el = document.getElementById('baechipyo-list');
+  if (!el) return;
+  el.innerHTML = list.slice(0, 5).map(b => `
+    <div class="baechipyo-item">
+      <div class="baechipyo-date">📅 ${fmtDate(b.date)}</div>
+      <img src="${b.src}" onclick="viewPhoto('${b.src}')">
+      <button class="baechipyo-del" onclick="deleteBaechipyo(${b.id})">✕ 삭제</button>
+    </div>`).join('') || '<div style="color:var(--text2);font-size:12px;text-align:center;padding:12px">배치표 사진이 없어요</div>';
+}
+
+function deleteBaechipyo(id) {
+  if (!confirm('삭제할까요?')) return;
+  const db = loadDB();
+  db.baechipyo = (db.baechipyo || []).filter(b => b.id !== id);
+  saveDB(db);
+  renderBaechipyo();
+}
+
+// ── 홈 배지 업데이트 ──
+function updateHomeBadges() {
+  const db = loadDB();
+  const t = today();
+  const ym = t.slice(0,7);
+  const day = getDay(db, t);
+  const golf = getGolf(db);
+
+  const todayRounds = golf.rounds.filter(r => r.date === t);
+  const roundCount  = todayRounds.reduce((s,r) => s+(r.roundCount||1), 0);
+  const todayIncome = todayRounds.reduce((s,r) => s+(r.total||0), 0);
+  const cal = getDayCalories(day);
+  const body = day.bodyState || '-';
+
+  document.getElementById('badge-rounds').textContent  = `⛳ 라운딩 ${roundCount}회`;
+  document.getElementById('badge-income').textContent  = `💰 ${(todayIncome/10000).toFixed(0)}만원`;
+  document.getElementById('badge-cal').textContent     = `🔥 ${fmt(cal)}kcal`;
+  document.getElementById('badge-mood').textContent    = `😊 ${body.slice(0,6)}`;
+}
+
+// ═══════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════
+function renderHome() {
+  const db = loadDB();
+  const s = getSettings(db);
+  const t = today();
+  const day = getDay(db, t);
+  const cal = getDayCalories(day);
+  const income = getDayIncome(day);
+  const expense = getDayExpense(day);
+
+  document.getElementById('home-steps').textContent = fmt(day.steps || 0);
+  document.getElementById('home-cal').textContent = fmt(cal);
+  document.getElementById('home-income').textContent = fmt(income);
+  document.getElementById('home-expense').textContent = fmt(expense);
+
+  const stepPct = Math.min(100, Math.round((day.steps || 0) / s.stepGoal * 100));
+  const calPct = Math.min(100, Math.round(cal / s.calGoal * 100));
+  document.getElementById('steps-bar').style.width = stepPct + '%';
+  document.getElementById('cal-bar').style.width = calPct + '%';
+  document.getElementById('steps-goal-text').textContent = `목표 ${fmt(s.stepGoal)}보 (${stepPct}%)`;
+  document.getElementById('cal-goal-text').textContent = `목표 ${fmt(s.calGoal)}kcal (${calPct}%)`;
+
+  // Monthly stats
+  const now = new Date();
+  const ym = t.slice(0, 7);
+  let mIncome = 0, mExpense = 0, stepSum = 0, stepDays = 0, calSum = 0, calDays = 0;
+  const days = db.days || {};
+  Object.entries(days).forEach(([d, v]) => {
+    if (!d.startsWith(ym)) return;
+    mIncome += getDayIncome(v);
+    mExpense += getDayExpense(v);
+    if (v.steps > 0) { stepSum += v.steps; stepDays++; }
+    const dc = getDayCalories(v);
+    if (dc > 0) { calSum += dc; calDays++; }
+  });
+  document.getElementById('home-monthly-income').textContent = fmt(mIncome);
+  document.getElementById('home-monthly-expense').textContent = fmt(mExpense);
+  const bal = mIncome - mExpense;
+  const balEl = document.getElementById('home-monthly-balance');
+  balEl.textContent = fmt(Math.abs(bal));
+  balEl.style.color = bal >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('home-avg-steps').textContent = fmt(stepDays ? Math.round(stepSum / stepDays) : 0);
+  document.getElementById('home-avg-cal').textContent = fmt(calDays ? Math.round(calSum / calDays) : 0);
+
+  const golf = getGolf(db);
+  const monthRounds = golf.rounds.filter(r => r.date && r.date.startsWith(ym)).length;
+  document.getElementById('home-rounds').textContent = monthRounds;
+
+  // 하루 기록 로드 + 배지 + 배치표
+  loadDailyRecord();
+  updateHomeBadges();
+  renderBaechipyo();
+
+  // Recent records
+  const recent = document.getElementById('home-recent');
+  const entries = Object.entries(days).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 5);
+  if (!entries.length) {
+    recent.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">아직 기록이 없어요</div></div>';
+    return;
+  }
+  recent.innerHTML = entries.map(([d, v]) => {
+    const dc = getDayCalories(v);
+    const di = getDayIncome(v);
+    const de = getDayExpense(v);
+    return `<div class="list-item">
+      <div class="list-icon" style="background:rgba(22,163,74,.15)">📅</div>
+      <div class="list-body">
+        <div class="list-title">${fmtDate(d)} (${dayOfWeek[new Date(d).getDay()]})</div>
+        <div class="list-sub">
+          👟 ${fmt(v.steps||0)} · 🔥 ${fmt(dc)}kcal
+          ${di ? ` · 💰 +${fmt(di)}` : ''}${de ? ` · 💸 -${fmt(de)}` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════
+let calYear, calMonth, calSelected;
+
+function jumpToDate(dateStr) {
+  if (!dateStr) return;
+  const d = new Date(dateStr);
+  if (isNaN(d)) return;
+  calYear = d.getFullYear();
+  calMonth = d.getMonth();
+  calSelected = dateStr;
+  renderCalendar();
+  // 상세 영역으로 스크롤
+  setTimeout(() => {
+    const el = document.getElementById('calDayDetail');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
+function initCal() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  calSelected = today();
+}
+
+function changeMonth(d) {
+  calMonth += d;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const db = loadDB();
+  const days = db.days || {};
+  const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calMonthLabel').textContent = `${calYear}년 ${monthNames[calMonth]}`;
+
+  const namesEl = document.getElementById('calDayNames');
+  namesEl.innerHTML = ['일','월','화','수','목','금','토'].map((n, i) =>
+    `<div class="cal-day-name ${i===0?'sun':i===6?'sat':''}">${n}</div>`
+  ).join('');
+
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const total = getDaysInMonth(calYear, calMonth);
+  const prevTotal = getDaysInMonth(calYear, calMonth - 1);
+  const t = today();
+  const grid = document.getElementById('calGrid');
+  let html = '';
+
+  for (let i = 0; i < first; i++) {
+    const d = prevTotal - first + i + 1;
+    html += `<div class="cal-day other-month"><div class="day-num">${d}</div></div>`;
+  }
+
+  // 월간 집계용
+  let mGolfCount = 0, mIncome = 0, mExpense = 0, mWorkDays = 0;
+
+  for (let d = 1; d <= total; d++) {
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dow = (first + d - 1) % 7;
+    const isToday = dateStr === t;
+    const isSel = dateStr === calSelected;
+    const dayData = days[dateStr] || {};
+    const hasFoods = (dayData.foods||[]).length > 0;
+    const hasGolf = (db.golf?.rounds||[]).some(r => r.date === dateStr);
+    const hasMood = !!(dayData.bodyState || dayData.diary);
+    const hasWake = !!(dayData.wakeTime);
+    const dayIncome = getDayIncome(dayData);
+    const dayCal = getDayCalories(dayData);
+
+    // 월간 집계
+    if (hasGolf) {
+      const gRounds = (db.golf?.rounds||[]).filter(r => r.date === dateStr);
+      gRounds.forEach(r => mGolfCount += (r.roundCount||1));
+      mWorkDays++;
+    }
+    mIncome += dayIncome;
+    mExpense += getDayExpense(dayData);
+
+    let dots = '';
+    if (hasGolf) dots += `<div class="dot" style="background:#22c55e"></div>`;
+    if (hasFoods) dots += `<div class="dot" style="background:#ef4444"></div>`;
+    if (hasMood)  dots += `<div class="dot" style="background:#f59e0b"></div>`;
+    if (hasWake)  dots += `<div class="dot" style="background:#3b82f6"></div>`;
+
+    const miniLines = [];
+    if (dayIncome > 0) miniLines.push(`<div class="day-mini" style="color:#16a34a">${Math.round(dayIncome/10000)}만</div>`);
+    if (dayCal > 0)    miniLines.push(`<div class="day-mini" style="color:#f97316">${dayCal}</div>`);
+
+    html += `<div class="cal-day ${isToday?'today':''} ${isSel?'selected':''} ${dow===0?'sun':dow===6?'sat':''}"
+      onclick="selectCalDay('${dateStr}')">
+      <div class="day-num">${d}</div>
+      <div class="day-dots">${dots}</div>
+      ${miniLines.join('')}
+    </div>`;
+  }
+
+  const remaining = 42 - first - total;
+  for (let d = 1; d <= remaining; d++) {
+    html += `<div class="cal-day other-month"><div class="day-num">${d}</div></div>`;
+  }
+
+  grid.innerHTML = html;
+
+  // 월간 요약
+  const summaryEl = document.getElementById('calMonthlySummary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">📊 ${monthNames[calMonth]} 요약</div>
+      <div class="month-summary">
+        <div class="ms-box"><div class="ms-val">${mGolfCount}회</div><div class="ms-lab">라운딩</div></div>
+        <div class="ms-box"><div class="ms-val" style="color:#16a34a">${Math.round(mIncome/10000)}만</div><div class="ms-lab">수입</div></div>
+        <div class="ms-box"><div class="ms-val" style="color:#ef4444">${Math.round(mExpense/10000)}만</div><div class="ms-lab">지출</div></div>
+        <div class="ms-box"><div class="ms-val" style="color:#3b82f6">${mWorkDays}일</div><div class="ms-lab">출근일수</div></div>
+      </div>`;
+  }
+}
+
+function selectCalDay(dateStr) {
+  calSelected = dateStr;
+  renderCalendar();
+  openDaySheet(dateStr);
+}
+
+
+
+function renderDayDetail(dateStr) {
+  // 하단 상세는 바텀시트로 이동 — calDayDetail은 숨김
+  document.getElementById('calDayDetail').innerHTML = '';
+}
+
+function buildDayDetailHTML(dateStr) {
+  if (!dateStr) return '';
+  const db = loadDB();
+  const day = getDay(db, dateStr);
+  const golf = getGolf(db);
+  const rounds = golf.rounds.filter(r => r.date === dateStr);
+  const cal = getDayCalories(day);
+  const income = getDayIncome(day);
+  const expense = getDayExpense(day);
+  const dow = dayOfWeek[new Date(dateStr).getDay()];
+  const photos = day.photos || [];
+
+  const photosHtml = photos.length
+    ? `<div class="cal-photos-grid">${photos.map((src,i) => `
+        <div class="cal-photo-item">
+          <img src="${src}" onclick="viewPhoto('${src}')">
+          <button class="del-photo" onclick="deleteCalPhoto('${dateStr}',${i})">✕</button>
+        </div>`).join('')}</div>`
+    : '<div style="color:var(--text2);font-size:12px;padding:8px 0;text-align:center">사진이 없어요 📷</div>';
+
+  // 음식 목록
+  const foodsHtml = (day.foods||[]).length
+    ? (day.foods||[]).map(f => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-size:13px">${f.meal?.includes('아침')?'🌅':f.meal?.includes('점심')?'☀️':f.meal?.includes('저녁')?'🌙':'🍫'} ${f.name}</div>
+            ${f.mood?`<div style="font-size:11px;color:var(--text2)">💬 ${f.mood}</div>`:''}
+            ${f.photos?.length?`<div style="display:flex;gap:4px;margin-top:4px">${f.photos.map(s=>`<img src="${s}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;cursor:pointer" onclick="viewPhoto('${s}')">`).join('')}</div>`:''}
+          </div>
+          <span style="font-size:13px;font-weight:700;color:var(--orange);flex-shrink:0;margin-left:8px">${fmt(f.cal)} kcal</span>
+        </div>`).join('')
+    : '<div style="color:var(--text2);font-size:12px;padding:6px 0">기록 없음</div>';
+
+  // 가계부 내역
+  const financeHtml = (day.finance||[]).length
+    ? (day.finance||[]).map(f => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-size:13px">${catEmoji[f.category]||'📦'} ${f.category} ${f.memo?'· '+f.memo:''}</div>
+            <div style="font-size:11px;color:var(--text2)">${f.method||''}</div>
+          </div>
+          <span style="font-size:13px;font-weight:700;flex-shrink:0;margin-left:8px;color:${f.type==='income'?'var(--green)':'var(--red)'}">
+            ${f.type==='income'?'+':'-'}${fmt(f.amount)}원
+          </span>
+        </div>`).join('')
+    : '<div style="color:var(--text2);font-size:12px;padding:6px 0">기록 없음</div>';
+
+  // 골프
+  const golfHtml = rounds.map(r => `
+    <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:600">⛳ ${r.course||'골프장'} ${r.weather||''} (${r.roundCount||1}회)</div>
+          ${r.partner?`<div style="font-size:12px;color:var(--text2)">👥 ${r.partner}</div>`:''}
+          ${r.memo?`<div style="font-size:12px;color:var(--text2)">💬 ${r.memo}</div>`:''}
+          ${r.people?`<div style="font-size:12px;color:var(--yellow)">🧑 ${r.people}</div>`:''}
+          <div style="display:flex;gap:5px;margin-top:4px">
+            <span class="badge badge-green">💰 ${fmt(r.pay||0)}원</span>
+            ${r.tip>0?`<span class="badge badge-yellow">💝 팁 ${fmt(r.tip)}원</span>`:''}
+          </div>
+        </div>
+        <span style="font-size:16px;font-weight:800;color:var(--green)">+${fmt(r.total||r.pay||0)}</span>
+      </div>
+      ${r.photos?.length?`<div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap">${r.photos.map(s=>`<img src="${s}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;cursor:pointer" onclick="viewPhoto('${s}')">`).join('')}</div>`:''}
+    </div>`).join('');
+
+  const S = dateStr; // 짧게
+  return `<div>
+    <!-- 날짜 헤더 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div style="font-size:18px;font-weight:800">${fmtDate(S)} <span style="color:var(--text2);font-weight:400">(${dow})</span></div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">
+          👟 ${fmt(day.steps||0)}보 &nbsp;·&nbsp; 🔥 ${fmt(cal)}kcal &nbsp;·&nbsp; 💰 +${fmt(income)}
+        </div>
+      </div>
+      <button onclick="closeDaySheet(event)" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2)">✕</button>
+    </div>
+
+    <!-- ① 걸음수 -->
+    <div style="background:#f0fdf4;border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:8px">👟 걸음수</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="sheet-steps-${S}" type="number" inputmode="numeric" placeholder="걸음수 입력"
+          value="${day.steps||''}"
+          style="flex:1;padding:10px;border:1.5px solid #bbf7d0;border-radius:10px;font-size:16px;font-weight:700;background:#fff">
+        <button onclick="sheetSaveSteps('${S}')"
+          style="background:#16a34a;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer">저장</button>
+      </div>
+    </div>
+
+    <!-- ② 칼로리 (음식) -->
+    <div style="background:#fff7ed;border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:13px;font-weight:700;color:#ea580c">🔥 오늘 먹은 것 <span style="font-weight:400;color:var(--text2)">${fmt(cal)}kcal</span></div>
+      </div>
+      <!-- 음식 추가 -->
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <input id="sheet-food-${S}" type="text" placeholder="음식 이름 (말하거나 입력)"
+          style="flex:1;padding:9px;border:1.5px solid #fed7aa;border-radius:10px;font-size:14px;background:#fff"
+          oninput="sheetSearchFood('${S}',this.value)">
+        <button class="mic-btn" style="background:#fff7ed;border-color:#fed7aa"
+          onclick="sheetVoiceFood('${S}')">🎤</button>
+        <label style="background:#f97316;color:#fff;border-radius:10px;padding:9px 12px;font-size:13px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px">
+          📷
+          <input type="file" accept="image/*" capture="environment" style="display:none"
+            onchange="sheetAddFoodPhoto('${S}',this)">
+        </label>
+      </div>
+      <!-- 검색 결과 -->
+      <div id="sheet-food-results-${S}" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+      <!-- 음식 목록 -->
+      <div id="sheet-food-list-${S}">
+        ${(day.foods||[]).map((f,i) => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #fed7aa">
+            <div style="font-size:13px">${f.meal?.includes('아침')?'🌅':f.meal?.includes('점심')?'☀️':f.meal?.includes('저녁')?'🌙':'🍫'} ${f.name}
+              ${f.photos?.length?`<img src="${f.photos[0]}" style="width:28px;height:28px;border-radius:5px;object-fit:cover;vertical-align:middle;margin-left:4px">`:''}</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:13px;font-weight:700;color:#ea580c">${fmt(f.cal)}kcal</span>
+              <button onclick="sheetDelFood('${S}',${i})" style="background:none;border:none;color:#ef4444;font-size:16px;cursor:pointer">✕</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- ③ 라운딩 + 가계부 -->
+    <div style="background:#f0fdf4;border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:10px">⛳ 라운딩 · 💰 가계부</div>
+      <!-- 라운딩 빠른 입력 -->
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button onclick="sheetRounding('${S}',1)"
+          style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer">
+          ⛳ 1회 +15만원
+        </button>
+        <button onclick="sheetRounding('${S}',2)"
+          style="flex:1;background:#059669;color:#fff;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer">
+          ⛳ 2회 +30만원
+        </button>
+      </div>
+      <!-- 팁 -->
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input id="sheet-tip-${S}" type="number" inputmode="numeric" placeholder="팁 금액 (원)"
+          style="flex:1;padding:9px;border:1.5px solid #bbf7d0;border-radius:10px;font-size:14px;background:#fff">
+        <button onclick="sheetAddTip('${S}')"
+          style="background:#f59e0b;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-weight:700;cursor:pointer">💝 팁</button>
+      </div>
+      <!-- 가계부 내역 -->
+      <div id="sheet-finance-${S}">
+        ${(day.finance||[]).length === 0
+          ? '<div style="color:var(--text2);font-size:12px;text-align:center;padding:6px">내역 없음</div>'
+          : (day.finance||[]).map((f,i) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #bbf7d0">
+              <div style="font-size:13px">${catEmoji[f.category]||'📦'} ${f.category}${f.memo?' · '+f.memo:''}</div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-weight:700;color:${f.type==='income'?'#16a34a':'#ef4444'}">${f.type==='income'?'+':'-'}${fmt(f.amount)}원</span>
+                <button onclick="sheetDelFinance('${S}',${i})" style="background:none;border:none;color:#ef4444;font-size:16px;cursor:pointer">✕</button>
+              </div>
+            </div>`).join('')}
+      </div>
+      <!-- 수지 합계 -->
+      <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid #bbf7d0">
+        <span style="font-size:13px;font-weight:700;color:#16a34a">수입 +${fmt(income)}원</span>
+        <span style="font-size:13px;font-weight:700;color:#ef4444">지출 -${fmt(expense)}원</span>
+        <span style="font-size:13px;font-weight:800;color:#1a2e1a">잔액 ${fmt(income-expense)}원</span>
+      </div>
+    </div>
+
+    <!-- ④ 사진 -->
+    <div style="background:#faf5ff;border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:10px">📸 사진 (${photos.length}장)</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <label style="flex:1;background:#7c3aed;color:#fff;border-radius:10px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:700">
+          📷 찍기
+          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addCalPhoto('${S}',this)">
+        </label>
+        <label style="flex:1;background:#9333ea;color:#fff;border-radius:10px;padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:700">
+          🖼️ 앨범
+          <input type="file" accept="image/*" multiple style="display:none" onchange="addCalPhoto('${S}',this)">
+        </label>
+      </div>
+      ${photos.length ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        ${photos.map((src,i) => `
+          <div style="position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden">
+            <img src="${src}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="viewPhoto('${src}')">
+            <button onclick="deleteCalPhoto('${S}',${i})" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer">✕</button>
+          </div>`).join('')}
+        </div>` : '<div style="text-align:center;color:var(--text2);font-size:12px;padding:8px">사진이 없어요</div>'}
+    </div>
+  </div>`;
+}
+
+function addCalPhoto(dateStr, input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  Promise.all(files.map(compressPhoto)).then(results => {
+    const db = loadDB();
+    const day = getDay(db, dateStr);
+    if (!day.photos) day.photos = [];
+    day.photos = [...day.photos, ...results];
+    saveDB(db);
+    renderCalendar();
+    refreshDaySheet(dateStr);
+  });
+  input.value = '';
+}
+
+function deleteCalPhoto(dateStr, idx) {
+  const db = loadDB();
+  const day = getDay(db, dateStr);
+  if (!day.photos) return;
+  day.photos.splice(idx, 1);
+  saveDB(db);
+  renderCalendar();
+  refreshDaySheet(dateStr);
+}
+
+function refreshDaySheet(dateStr) {
+  const el = document.getElementById('daySheet');
+  if (el.classList.contains('open')) {
+    document.getElementById('sheetContent').innerHTML = buildDayDetailHTML(dateStr);
+  }
+}
+
+// ═══════════════════════════════════════════
+// 가계부
+// ═══════════════════════════════════════════
+let finType = 'expense';
+
+function setFinanceTab(tab, el) {
+  document.querySelectorAll('#page-finance .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('finance-list').style.display = tab==='list' ? '' : 'none';
+  document.getElementById('finance-add').style.display = tab==='add' ? '' : 'none';
+  document.getElementById('finance-stats').style.display = tab==='stats' ? '' : 'none';
+  if (tab==='stats') renderFinStats();
+}
+
+function setFinType(type, el) {
+  finType = type;
+  document.querySelectorAll('#finance-add .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const catEl = document.getElementById('fin-category');
+  if (type === 'income') {
+    catEl.innerHTML = `<option value="급여">💼 급여</option><option value="부업">💡 부업</option><option value="기타">📦 기타</option>`;
+  } else {
+    catEl.innerHTML = `<option value="식비">🍚 식비</option><option value="교통">🚗 교통</option><option value="쇼핑">🛍️ 쇼핑</option><option value="의료">💊 의료</option><option value="문화">🎬 문화/여가</option><option value="골프">⛳ 골프</option><option value="기타">📦 기타</option>`;
+  }
+}
+
+function saveFinance() {
+  const amount = parseInt(document.getElementById('fin-amount').value);
+  if (!amount || amount <= 0) { alert('금액을 입력해주세요'); return; }
+  const db = loadDB();
+  const date = document.getElementById('fin-date').value || today();
+  const day = getDay(db, date);
+  day.finance.push({
+    id: Date.now(),
+    type: finType,
+    amount,
+    category: document.getElementById('fin-category').value,
+    method: document.getElementById('fin-method').value,
+    memo: document.getElementById('fin-memo').value,
+    date
+  });
+  saveDB(db);
+  document.getElementById('fin-amount').value = '';
+  document.getElementById('fin-memo').value = '';
+  renderFinance();
+  // switch to list
+  document.querySelectorAll('#page-finance .tab-btn')[0].click();
+}
+
+const catEmoji = {식비:'🍚',교통:'🚗',쇼핑:'🛍️',의료:'💊',문화:'🎬',골프:'⛳',급여:'💼',부업:'💡',캐디수당:'⛳',팁:'💝',기타:'📦'};
+
+function renderFinance() {
+  const db = loadDB();
+  const days = db.days || {};
+  const ym = today().slice(0, 7);
+  let mIncome = 0, mExpense = 0;
+  const items = [];
+
+  Object.entries(days).forEach(([d, v]) => {
+    if (!d.startsWith(ym)) return;
+    (v.finance || []).forEach(f => {
+      if (f.type === 'income') mIncome += f.amount;
+      else mExpense += f.amount;
+      items.push({ ...f, _date: d });
+    });
+  });
+
+  document.getElementById('fin-month-in').textContent = fmt(mIncome);
+  document.getElementById('fin-month-out').textContent = fmt(mExpense);
+  const bal = mIncome - mExpense;
+  const balEl = document.getElementById('fin-balance');
+  balEl.textContent = (bal >= 0 ? '' : '-') + fmt(Math.abs(bal));
+  balEl.style.color = bal >= 0 ? 'var(--green)' : 'var(--red)';
+
+  items.sort((a, b) => b._date.localeCompare(a._date) || b.id - a.id);
+
+  const el = document.getElementById('finance-items');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">이번달 거래 내역이 없어요</div></div>';
+    return;
+  }
+  el.innerHTML = items.map(f => `
+    <div class="list-item">
+      <div class="list-icon" style="background:${f.type==='income'?'rgba(16,185,129,.15)':'rgba(239,68,68,.15)'}">
+        ${catEmoji[f.category]||'📦'}
+      </div>
+      <div class="list-body">
+        <div class="list-title">${f.category} ${f.memo ? '· '+f.memo : ''}</div>
+        <div class="list-sub">${fmtDate(f._date)} · ${f.method||''}</div>
+      </div>
+      <div>
+        <div class="list-amount ${f.type==='income'?'amount-in':'amount-out'}">
+          ${f.type==='income'?'+':'-'}${fmt(f.amount)}
+        </div>
+        <div style="text-align:right;margin-top:4px">
+          <button onclick="deleteFinance('${f._date}',${f.id})" style="background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer">🗑️</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function deleteFinance(date, id) {
+  if (!confirm('삭제할까요?')) return;
+  const db = loadDB();
+  const day = getDay(db, date);
+  day.finance = day.finance.filter(f => f.id !== id);
+  saveDB(db);
+  renderFinance();
+}
+
+function renderFinStats() {
+  const db = loadDB();
+  const days = db.days || {};
+
+  // Monthly chart (last 6 months)
+  const months = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+  }
+
+  const monthData = months.map(ym => {
+    let expense = 0;
+    Object.entries(days).forEach(([d, v]) => {
+      if (d.startsWith(ym)) expense += getDayExpense(v);
+    });
+    return { ym, expense };
+  });
+
+  const maxE = Math.max(...monthData.map(m => m.expense), 1);
+  document.getElementById('fin-monthly-chart').innerHTML = monthData.map(m => `
+    <div class="bar-col">
+      <div class="bar-value">${m.expense > 0 ? Math.round(m.expense/10000)+'만' : ''}</div>
+      <div class="bar-fill" style="height:${Math.round(m.expense/maxE*80)}px;background:linear-gradient(var(--red),var(--orange))"></div>
+      <div class="bar-label">${m.ym.slice(5)}월</div>
+    </div>`).join('');
+
+  // Category breakdown
+  const ym = today().slice(0,7);
+  const catMap = {};
+  Object.entries(days).forEach(([d, v]) => {
+    if (!d.startsWith(ym)) return;
+    (v.finance||[]).filter(f=>f.type==='expense').forEach(f => {
+      catMap[f.category] = (catMap[f.category]||0) + f.amount;
+    });
+  });
+  const catEntries = Object.entries(catMap).sort((a,b) => b[1]-a[1]);
+  const total = catEntries.reduce((s,[,v])=>s+v,0)||1;
+  document.getElementById('fin-category-chart').innerHTML = catEntries.length
+    ? catEntries.map(([cat,amt]) => `
+      <div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+          <span>${catEmoji[cat]||''} ${cat}</span>
+          <span>${fmt(amt)}원 (${Math.round(amt/total*100)}%)</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${Math.round(amt/total*100)}%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+        </div>
+      </div>`).join('')
+    : '<div class="empty"><div class="empty-text">이번달 지출 내역이 없어요</div></div>';
+}
+
+// ═══════════════════════════════════════════
+// 칼로리
+// ═══════════════════════════════════════════
+const FOODS_DB = [
+  {name:'공기밥',cal:300},{name:'된장찌개',cal:80},{name:'김치찌개',cal:100},{name:'삼겹살 1인분',cal:530},
+  {name:'치킨 1조각',cal:200},{name:'햄버거',cal:500},{name:'피자 1조각',cal:280},{name:'라면',cal:500},
+  {name:'떡볶이',cal:350},{name:'비빔밥',cal:560},{name:'냉면',cal:460},{name:'김밥 1줄',cal:320},
+  {name:'계란 1개',cal:80},{name:'사과 1개',cal:80},{name:'바나나 1개',cal:90},{name:'오렌지 1개',cal:60},
+  {name:'아메리카노',cal:10},{name:'라떼',cal:120},{name:'콜라 1캔',cal:150},{name:'맥주 1캔',cal:150},
+  {name:'소주 1잔',cal:65},{name:'초콜릿 1개',cal:50},{name:'과자 한봉지',cal:200},{name:'아이스크림',cal:200},
+  {name:'샐러드',cal:80},{name:'샌드위치',cal:350},{name:'파스타',cal:500},{name:'스테이크 200g',cal:400},
+  {name:'두부 반모',cal:80},{name:'닭가슴살 100g',cal:165},{name:'고구마 1개',cal:130},{name:'빵 1조각',cal:80},
+];
+
+function searchFood(q) {
+  if (!q.trim()) { document.getElementById('food-results').innerHTML = ''; return; }
+  const results = FOODS_DB.filter(f => f.name.includes(q));
+  document.getElementById('food-results').innerHTML = results.slice(0,8).map(f => `
+    <div class="food-item" onclick="selectFood('${f.name}',${f.cal})">
+      <span class="food-name">${f.name}</span>
+      <span class="food-cal">${f.cal} kcal</span>
+    </div>`).join('') || '<div style="padding:8px;color:var(--text2);font-size:13px">검색 결과 없음 — 직접 입력하세요</div>';
+}
+
+function selectFood(name, cal) {
+  document.getElementById('food-name-input').value = name;
+  document.getElementById('food-cal-input').value = cal;
+  document.getElementById('food-results').innerHTML = '';
+  document.getElementById('food-search').value = '';
+}
+
+function openAddFood() {
+  document.getElementById('food-date').value = today();
+  document.getElementById('food-name-input').value = '';
+  document.getElementById('food-cal-input').value = '';
+  document.getElementById('food-search').value = '';
+  document.getElementById('food-mood').value = '';
+  document.getElementById('food-results').innerHTML = '';
+  document.getElementById('food-photo-preview').innerHTML = '';
+  document.getElementById('voice-result-food').textContent = '';
+  foodPhotos = [];
+  openModal('modal-food');
+}
+
+function saveFood() {
+  const name = document.getElementById('food-name-input').value.trim();
+  const cal = parseInt(document.getElementById('food-cal-input').value);
+  if (!name || !cal) { alert('음식 이름과 칼로리를 입력해주세요'); return; }
+  const db = loadDB();
+  const date = document.getElementById('food-date').value || today();
+  const day = getDay(db, date);
+  day.foods.push({
+    id: Date.now(), name, cal,
+    meal: document.getElementById('food-meal').value,
+    mood: document.getElementById('food-mood').value.trim(),
+    photos: [...foodPhotos]
+  });
+  saveDB(db);
+  foodPhotos = [];
+  closeModal('modal-food');
+  renderCalorie();
+}
+
+function renderCalorie() {
+  const db = loadDB();
+  const s = getSettings(db);
+  const day = getDay(db, today());
+  const eaten = getDayCalories(day);
+  const remain = Math.max(0, s.calGoal - eaten);
+  const pct = Math.min(1, eaten / s.calGoal);
+
+  document.getElementById('cal-eaten').textContent = fmt(eaten);
+  document.getElementById('cal-goal-num').textContent = fmt(s.calGoal);
+  document.getElementById('cal-remain').textContent = fmt(remain);
+  document.getElementById('cal-foods-count').textContent = day.foods.length;
+
+  // circle
+  const circumference = 364.4;
+  document.getElementById('calCircle').style.strokeDashoffset = circumference * (1 - pct);
+
+  // food list
+  const listEl = document.getElementById('cal-food-list');
+  if (!day.foods.length) {
+    listEl.innerHTML = '<div class="empty"><div class="empty-icon">🍽️</div><div class="empty-text">오늘 먹은 것을 기록해보세요</div></div>';
+  } else {
+    listEl.innerHTML = day.foods.map(f => `
+      <div class="list-item" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="list-icon" style="background:rgba(249,115,22,.15)">${f.meal?.includes('아침')?'🌅':f.meal?.includes('점심')?'☀️':f.meal?.includes('저녁')?'🌙':'🍫'}</div>
+          <div class="list-body">
+            <div class="list-title">${f.name}</div>
+            <div class="list-sub">${f.meal||''}${f.mood?' · 💬 '+f.mood:''}</div>
+          </div>
+          <div>
+            <div class="list-amount" style="color:var(--orange)">${fmt(f.cal)}</div>
+            <div style="font-size:10px;color:var(--text2);text-align:right">kcal</div>
+            <button onclick="deleteFood(${f.id})" style="background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer">🗑️</button>
+          </div>
+        </div>
+        ${f.photos && f.photos.length ? `<div class="record-photos">${f.photos.map(src=>`<img src="${src}" class="photo-thumb" onclick="viewPhoto('${src}')">`).join('')}</div>` : ''}
+      </div>`).join('');
+  }
+
+  // weekly chart
+  const days = db.days || {};
+  const weekly = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const ds = d.toISOString().slice(0,10);
+    const c = getDayCalories(days[ds]||{});
+    weekly.push({ ds, c });
+  }
+  const maxC = Math.max(...weekly.map(w=>w.c), s.calGoal, 1);
+  document.getElementById('cal-weekly-chart').innerHTML = weekly.map(w => `
+    <div class="bar-col">
+      <div class="bar-value">${w.c||''}</div>
+      <div class="bar-fill" style="height:${Math.round(w.c/maxC*80)}px;background:linear-gradient(var(--red),var(--orange))"></div>
+      <div class="bar-label">${dayOfWeek[new Date(w.ds).getDay()]}</div>
+    </div>`).join('');
+}
+
+function deleteFood(id) {
+  const db = loadDB();
+  const day = getDay(db, today());
+  day.foods = day.foods.filter(f => f.id !== id);
+  saveDB(db);
+  renderCalorie();
+}
+
+// ═══════════════════════════════════════════
+// 걸음수
+// ═══════════════════════════════════════════
+function openAddSteps() {
+  document.getElementById('steps-date-input').value = today();
+  const db = loadDB();
+  const day = getDay(db, today());
+  document.getElementById('steps-count-input').value = day.steps || '';
+  openModal('modal-steps');
+}
+
+function saveSteps() {
+  const steps = parseInt(document.getElementById('steps-count-input').value);
+  if (!steps || steps < 0) { alert('걸음수를 입력해주세요'); return; }
+  const db = loadDB();
+  const date = document.getElementById('steps-date-input').value || today();
+  const day = getDay(db, date);
+  day.steps = steps;
+  saveDB(db);
+  closeModal('modal-steps');
+  renderSteps();
+}
+
+function renderSteps() {
+  const db = loadDB();
+  const s = getSettings(db);
+  const day = getDay(db, today());
+  const steps = day.steps || 0;
+  const goal = s.stepGoal || 10000;
+  const weight = s.weight || 65;
+  const km = (steps * 0.0007).toFixed(1);
+  const burned = Math.round(steps * weight * 0.0004);
+  const pct = Math.min(100, Math.round(steps / goal * 100));
+
+  document.getElementById('steps-today').textContent = fmt(steps);
+  document.getElementById('steps-goal-num').textContent = fmt(goal);
+  document.getElementById('steps-km').textContent = km;
+  document.getElementById('steps-burned').textContent = fmt(burned);
+  document.getElementById('steps-pct').textContent = pct + '%';
+
+  const circumference = 364.4;
+  document.getElementById('stepsCircle').style.strokeDashoffset = circumference * (1 - Math.min(1, steps/goal));
+
+  // Weekly chart
+  const days = db.days || {};
+  const weekly = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const ds = d.toISOString().slice(0,10);
+    const st = (days[ds]||{}).steps || 0;
+    weekly.push({ ds, st });
+  }
+  const maxS = Math.max(...weekly.map(w=>w.st), goal, 1);
+  document.getElementById('steps-weekly-chart').innerHTML = weekly.map(w => `
+    <div class="bar-col">
+      <div class="bar-value">${w.st ? Math.round(w.st/1000)+'k' : ''}</div>
+      <div class="bar-fill" style="height:${Math.round(w.st/maxS*80)}px;background:linear-gradient(var(--blue),var(--accent))"></div>
+      <div class="bar-label">${dayOfWeek[new Date(w.ds).getDay()]}</div>
+    </div>`).join('');
+
+  // Monthly stats
+  const ym = today().slice(0,7);
+  const monthSteps = Object.entries(days).filter(([d])=>d.startsWith(ym)).map(([,v])=>v.steps||0).filter(s=>s>0);
+  document.getElementById('steps-month-avg').textContent = fmt(monthSteps.length ? Math.round(monthSteps.reduce((a,b)=>a+b,0)/monthSteps.length) : 0);
+  document.getElementById('steps-month-max').textContent = fmt(monthSteps.length ? Math.max(...monthSteps) : 0);
+  document.getElementById('steps-month-days').textContent = monthSteps.filter(s=>s>=goal).length;
+}
+
+// ═══════════════════════════════════════════
+// 골프
+// ═══════════════════════════════════════════
+function setGolfTab(tab, el) {
+  document.querySelectorAll('#page-golf .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('golf-list').style.display = tab==='list' ? '' : 'none';
+  document.getElementById('golf-add').style.display = tab==='add' ? '' : 'none';
+  document.getElementById('golf-clubs').style.display = tab==='clubs' ? '' : 'none';
+  if (tab==='add') {
+    // 새 라운딩 탭 열 때 초기화
+    document.getElementById('golf-date').value = today();
+    document.getElementById('golf-photo-preview').innerHTML = '';
+    document.getElementById('voice-result-golf').textContent = '';
+    golfPhotos = [];
+  }
+  if (tab==='clubs') renderClubs();
+}
+
+// ── 라운딩 횟수 / 팁 상태 ──
+let currentRoundCount = 1;
+const ROUND_PAY = 150000;
+
+function setRoundCount(n) {
+  currentRoundCount = n;
+  document.getElementById('rounds-1').classList.toggle('active', n === 1);
+  document.getElementById('rounds-2').classList.toggle('active', n === 2);
+  updatePaySummary();
+}
+
+function toggleTip(checked) {
+  document.getElementById('tip-input-wrap').style.display = checked ? '' : 'none';
+  if (!checked) document.getElementById('tip-amount').value = '';
+  updatePaySummary();
+}
+
+function updatePaySummary() {
+  const tip = parseInt(document.getElementById('tip-amount').value) || 0;
+  const total = ROUND_PAY * currentRoundCount + tip;
+  document.getElementById('pay-total').textContent = total.toLocaleString('ko-KR') + '원';
+}
+
+function saveGolfRound() {
+  const date = document.getElementById('golf-date').value || today();
+  const course = document.getElementById('golf-course').value || '골프장';
+  const tip = parseInt(document.getElementById('tip-amount').value) || 0;
+  const hasTip = document.getElementById('tip-toggle').checked;
+  const pay = ROUND_PAY * currentRoundCount;
+  const total = pay + tip;
+
+  const db = loadDB();
+  const golf = getGolf(db);
+  golf.rounds.push({
+    id: Date.now(),
+    date,
+    course,
+    partner: document.getElementById('golf-partner').value,
+    weather: document.getElementById('golf-weather').value,
+    roundCount: currentRoundCount,
+    pay,
+    tip: hasTip ? tip : 0,
+    total,
+    memo: document.getElementById('golf-memo').value,
+    people: document.getElementById('golf-people').value,
+    photos: [...golfPhotos]
+  });
+
+  // ── 가계부 수입 자동 등록 ──
+  const day = getDay(db, date);
+  // 라운딩 수당
+  day.finance.push({
+    id: Date.now() + 1,
+    type: 'income',
+    amount: pay,
+    category: '캐디수당',
+    method: '현금',
+    memo: `${course} ${currentRoundCount}회 라운딩`,
+    date
+  });
+  // 팁 (별도 항목)
+  if (hasTip && tip > 0) {
+    day.finance.push({
+      id: Date.now() + 2,
+      type: 'income',
+      amount: tip,
+      category: '팁',
+      method: '현금',
+      memo: `${course} 팁`,
+      date
+    });
+  }
+
+  saveDB(db);
+
+  // 폼 초기화
+  ['golf-course','golf-partner','golf-memo','golf-people'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('tip-toggle').checked = false;
+  document.getElementById('tip-amount').value = '';
+  document.getElementById('tip-input-wrap').style.display = 'none';
+  document.getElementById('golf-photo-preview').innerHTML = '';
+  document.getElementById('voice-result-golf').textContent = '';
+  setRoundCount(1);
+  golfPhotos = [];
+  renderGolf();
+  document.querySelectorAll('#page-golf .tab-btn')[0].click();
+}
+
+function renderGolf() {
+  const db = loadDB();
+  const golf = getGolf(db);
+  const rounds = golf.rounds.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const ym = today().slice(0,7);
+  const monthRounds = rounds.filter(r => r.date?.startsWith(ym));
+  const monthIncome = monthRounds.reduce((s,r) => s + (r.pay||0), 0);
+  const monthTip    = monthRounds.reduce((s,r) => s + (r.tip||0), 0);
+  const totalRoundCount = rounds.reduce((s,r) => s + (r.roundCount||1), 0);
+
+  document.getElementById('golf-total').textContent = totalRoundCount + '회';
+  document.getElementById('golf-month-income').textContent = (monthIncome/10000).toFixed(0) + '만';
+  document.getElementById('golf-month-tip').textContent = monthTip ? (monthTip/10000).toFixed(1) + '만' : '0';
+
+  document.getElementById('golf-rounds-list').innerHTML = rounds.length
+    ? rounds.map(r => {
+        const pay = r.pay || (r.roundCount||1) * ROUND_PAY;
+        const tip = r.tip || 0;
+        const total = r.total || pay + tip;
+        return `
+      <div class="list-item" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="list-icon" style="background:rgba(22,163,74,.15)">⛳</div>
+          <div class="list-body">
+            <div class="list-title">${r.course||'골프장'} <span style="font-size:11px;color:var(--text2)">${r.roundCount||1}회</span></div>
+            <div class="list-sub">${fmtDate(r.date||'')} ${r.weather||''} ${r.partner?'· '+r.partner:''}</div>
+            <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap">
+              <span class="badge badge-green">💰 ${fmt(pay)}원</span>
+              ${tip>0?`<span class="badge badge-yellow">💝 팁 ${fmt(tip)}원</span>`:''}
+            </div>
+            ${r.memo?`<div class="list-sub" style="color:var(--text);margin-top:3px">💬 ${r.memo}</div>`:''}
+            ${r.people?`<div class="list-sub" style="color:var(--yellow);margin-top:2px">🧑 ${r.people}</div>`:''}
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:16px;font-weight:800;color:var(--green)">+${fmt(total)}</div>
+            <div style="font-size:10px;color:var(--text2)">원</div>
+            <button onclick="deleteRound(${r.id})" style="background:none;border:none;color:var(--text2);font-size:14px;cursor:pointer;display:block;margin-top:6px">🗑️</button>
+          </div>
+        </div>
+        ${r.photos && r.photos.length ? `<div class="record-photos">${r.photos.map(src=>`<img src="${src}" class="photo-thumb" onclick="viewPhoto('${src}')">`).join('')}</div>` : ''}
+      </div>`}).join('')
+    : '<div class="empty"><div class="empty-icon">⛳</div><div class="empty-text">라운딩 기록이 없어요</div></div>';
+}
+
+function deleteRound(id) {
+  if (!confirm('삭제할까요?')) return;
+  const db = loadDB();
+  const golf = getGolf(db);
+  golf.rounds = golf.rounds.filter(r => r.id !== id);
+  saveDB(db);
+  renderGolf();
+}
+
+let _clubPhotoData = null;
+
+function previewClubPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  compressPhoto(file).then(src => {
+    _clubPhotoData = src;
+    document.getElementById('club-photo-img').src = src;
+    document.getElementById('club-photo-preview').style.display = 'block';
+  });
+  input.value = '';
+}
+
+function clearClubPhoto() {
+  _clubPhotoData = null;
+  document.getElementById('club-photo-preview').style.display = 'none';
+  document.getElementById('club-photo-img').src = '';
+}
+
+function openAddClub() {
+  document.getElementById('club-name').value = '';
+  document.getElementById('club-brand').value = '';
+  document.getElementById('club-dist').value = '';
+  document.getElementById('club-date').value = today();
+  clearClubPhoto();
+  openModal('modal-club');
+}
+
+function saveClub() {
+  const name = document.getElementById('club-name').value.trim();
+  if (!name) { showToast('클럽 이름을 입력해주세요'); return; }
+  const db = loadDB();
+  const golf = getGolf(db);
+  golf.clubs.push({
+    id: Date.now(),
+    name,
+    brand: document.getElementById('club-brand').value,
+    dist: parseInt(document.getElementById('club-dist').value) || 0,
+    date: document.getElementById('club-date').value,
+    photo: _clubPhotoData || null,
+  });
+  saveDB(db);
+  closeModal('modal-club');
+  _clubPhotoData = null;
+  renderClubs();
+  showToast('🏑 클럽 저장!');
+}
+
+function renderClubs() {
+  const db = loadDB();
+  const golf = getGolf(db);
+  document.getElementById('club-list').innerHTML = golf.clubs.length
+    ? golf.clubs.map(c => `
+      <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+        ${c.photo
+          ? `<img src="${c.photo}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;flex-shrink:0;cursor:pointer" onclick="viewPhoto('${c.photo}')">`
+          : `<div style="width:60px;height:60px;border-radius:10px;background:rgba(22,163,74,.1);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🏑</div>`}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:700">${c.name}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">
+            ${c.brand?c.brand+' &nbsp;':''}${c.dist?'📏 '+c.dist+'m &nbsp;':''}${c.date?'📅 '+fmtDate(c.date):''}
+          </div>
+        </div>
+        <button onclick="deleteClub(${c.id})" style="background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;flex-shrink:0">🗑️</button>
+      </div>`).join('')
+    : '<div class="empty"><div class="empty-icon">🏑</div><div class="empty-text">클럽을 추가해보세요</div></div>';
+}
+
+function deleteClub(id) {
+  if (!confirm('삭제할까요?')) return;
+  const db = loadDB();
+  const golf = getGolf(db);
+  golf.clubs = golf.clubs.filter(c => c.id !== id);
+  saveDB(db);
+  renderClubs();
+}
+
+// ═══════════════════════════════════════════
+// REPORT
+// ═══════════════════════════════════════════
+let reportYear, reportMonth;
+
+function initReport() {
+  const now = new Date();
+  reportYear = now.getFullYear();
+  reportMonth = now.getMonth();
+}
+
+function changeReportMonth(d) {
+  reportMonth += d;
+  if (reportMonth < 0) { reportMonth = 11; reportYear--; }
+  if (reportMonth > 11) { reportMonth = 0; reportYear++; }
+  renderReport();
+}
+
+function renderReport() {
+  const db = loadDB();
+  const days = db.days || {};
+  const golf = getGolf(db);
+  const ym = `${reportYear}-${String(reportMonth+1).padStart(2,'0')}`;
+  const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('reportMonthLabel').textContent = `${reportYear}년 ${monthNames[reportMonth]}`;
+
+  let income=0, expense=0, stepSum=0, stepDays=0, calSum=0, calDays=0;
+  const catMap = {};
+  const dailyItems = [];
+
+  Object.entries(days).filter(([d])=>d.startsWith(ym)).sort().forEach(([d,v])=>{
+    income += getDayIncome(v);
+    expense += getDayExpense(v);
+    if (v.steps>0){stepSum+=v.steps;stepDays++;}
+    const dc=getDayCalories(v);
+    if(dc>0){calSum+=dc;calDays++;}
+    (v.finance||[]).filter(f=>f.type==='expense').forEach(f=>{catMap[f.category]=(catMap[f.category]||0)+f.amount});
+    if(v.steps||dc||(v.finance||[]).length) dailyItems.push({d,v,dc});
+  });
+
+  document.getElementById('rpt-income').textContent = fmt(income);
+  document.getElementById('rpt-expense').textContent = fmt(expense);
+  const bal = income-expense;
+  const balEl = document.getElementById('rpt-balance');
+  balEl.textContent = (bal>=0?'':'-')+fmt(Math.abs(bal));
+  balEl.style.color = bal>=0?'var(--green)':'var(--red)';
+
+  const rounds = golf.rounds.filter(r=>r.date?.startsWith(ym)).length;
+  document.getElementById('rpt-avg-steps').textContent = fmt(stepDays?Math.round(stepSum/stepDays):0);
+  document.getElementById('rpt-avg-cal').textContent = fmt(calDays?Math.round(calSum/calDays):0);
+  document.getElementById('rpt-golf-rounds').textContent = rounds;
+
+  const catEntries = Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+  const total = catEntries.reduce((s,[,v])=>s+v,0)||1;
+  document.getElementById('rpt-category').innerHTML = catEntries.length
+    ? catEntries.map(([cat,amt])=>`
+      <div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+          <span>${catEmoji[cat]||''} ${cat}</span><span>${fmt(amt)}원 (${Math.round(amt/total*100)}%)</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(amt/total*100)}%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div>
+      </div>`).join('')
+    : '<div class="empty" style="padding:20px 0"><div class="empty-text">지출 내역 없음</div></div>';
+
+  document.getElementById('rpt-daily-list').innerHTML = dailyItems.length
+    ? dailyItems.reverse().map(({d,v,dc})=>`
+      <div class="list-item" style="margin-bottom:6px">
+        <div class="list-body">
+          <div class="list-title">${fmtDate(d)} (${dayOfWeek[new Date(d).getDay()]})</div>
+          <div class="list-sub">
+            ${v.steps?`👟 ${fmt(v.steps)}보 `:''} ${dc?`🔥 ${fmt(dc)}kcal `:''}
+            ${getDayIncome(v)?`💰 +${fmt(getDayIncome(v))} `:''}${getDayExpense(v)?`💸 -${fmt(getDayExpense(v))}`:''}
+          </div>
+        </div>
+      </div>`).join('')
+    : '<div class="empty" style="padding:20px"><div class="empty-text">기록 없음</div></div>';
+}
+
+// ═══════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════
+function showSettings() {
+  const db = loadDB();
+  const s = getSettings(db);
+  document.getElementById('set-name').value = s.name || '';
+  document.getElementById('set-step-goal').value = s.stepGoal || 10000;
+  document.getElementById('set-cal-goal').value = s.calGoal || 2000;
+  document.getElementById('set-weight').value = s.weight || 65;
+  openModal('modal-settings');
+}
+
+function saveSettings() {
+  const db = loadDB();
+  db.settings = {
+    name: document.getElementById('set-name').value || '나',
+    stepGoal: parseInt(document.getElementById('set-step-goal').value) || 10000,
+    calGoal: parseInt(document.getElementById('set-cal-goal').value) || 2000,
+    weight: parseInt(document.getElementById('set-weight').value) || 65,
+  };
+  saveDB(db);
+  closeModal('modal-settings');
+  renderHome();
+  renderSteps();
+  renderCalorie();
+}
+
+function exportData() {
+  const db = loadDB();
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `onlyforme_backup_${today()}.json`;
+  a.click();
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (confirm('데이터를 가져오면 기존 데이터가 덮어씌워집니다. 계속할까요?')) {
+        saveDB(data);
+        closeModal('modal-settings');
+        renderHome();
+        alert('데이터를 성공적으로 가져왔습니다!');
+      }
+    } catch { alert('파일 형식이 올바르지 않습니다.'); }
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════
+// PWA
+// ═══════════════════════════════════════════
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display = '';
+  document.getElementById('installBannerWrap').innerHTML = `
+    <div class="install-banner">
+      <div class="ib-icon">📱</div>
+      <div class="ib-text"><strong>앱으로 설치하기</strong><br>홈 화면에 추가하면 언제든지 빠르게 열 수 있어요</div>
+      <button class="ib-btn" onclick="installApp()">설치</button>
+    </div>`;
+});
+
+function installApp() {
+  if (!deferredPrompt) { alert('브라우저 메뉴에서 "홈 화면에 추가"를 눌러주세요!'); return; }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    document.getElementById('installBtn').style.display = 'none';
+    document.getElementById('installBannerWrap').innerHTML = '';
+  });
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+
+// ═══════════════════════════════════════════
+// 날짜 시트 전용 함수들
+// ═══════════════════════════════════════════
+let _sheetDate = null;
+
+function openDaySheet(dateStr) {
+  _sheetDate = dateStr;
+  const el = document.getElementById('daySheet');
+  document.getElementById('sheetContent').innerHTML = buildDayDetailHTML(dateStr);
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDaySheet(e) {
+  if (!e || e.target.id === 'daySheet' || e.target.tagName === 'BUTTON') {
+    document.getElementById('daySheet').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function sheetSaveSteps(dateStr) {
+  const val = parseInt(document.getElementById('sheet-steps-'+dateStr).value);
+  if (!val || val < 0) return;
+  const db = loadDB(); const day = getDay(db, dateStr);
+  day.steps = val; saveDB(db);
+  renderSteps(); renderHome(); renderCalendar();
+  showToast('👟 걸음수 저장!');
+}
+
+function sheetSearchFood(dateStr, query) {
+  if (!query || query.length < 1) { document.getElementById('sheet-food-results-'+dateStr).innerHTML=''; return; }
+  const results = foodDB.filter(f => f.name.includes(query)).slice(0, 8);
+  const html = results.map(f =>
+    `<button onclick="sheetAddFood('${dateStr}','${f.name}',${f.cal})"
+      style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:99px;padding:5px 12px;font-size:12px;cursor:pointer;white-space:nowrap">
+      ${f.name} <span style="color:#ea580c;font-weight:700">${f.cal}kcal</span>
+    </button>`
+  ).join('');
+  document.getElementById('sheet-food-results-'+dateStr).innerHTML = html || '<span style="font-size:12px;color:var(--text2)">검색 결과 없음</span>';
+}
+
+function sheetVoiceFood(dateStr) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('크롬 브라우저에서 사용해주세요'); return; }
+  const r = new SR(); r.lang='ko-KR'; r.interimResults=false;
+  showToast('🎤 말해보세요...');
+  r.onresult = e => {
+    const txt = e.results[0][0].transcript;
+    const inp = document.getElementById('sheet-food-'+dateStr);
+    if (inp) { inp.value = txt; sheetSearchFood(dateStr, txt); }
+  };
+  r.onerror = () => showToast('❌ 마이크 오류. 권한을 확인해주세요');
+  r.start();
+}
+
+function sheetAddFoodPhoto(dateStr, input) {
+  const file = input.files[0]; if (!file) return;
+  const name = document.getElementById('sheet-food-'+dateStr).value || '음식사진';
+  compressPhoto(file).then(src => {
+    const db = loadDB(); const day = getDay(db, dateStr);
+    if (!day.foods) day.foods = [];
+    const cal = parseInt(prompt('칼로리를 입력해주세요 (kcal)', '300')) || 0;
+    day.foods.push({ id:Date.now(), name, cal, meal:'☀️ 점심', photos:[src] });
+    saveDB(db); refreshDaySheet(dateStr); renderCalendar();
+    showToast('📷 사진 음식 추가!');
+  });
+  input.value = '';
+}
+
+function sheetAddFood(dateStr, name, cal) {
+  const db = loadDB(); const day = getDay(db, dateStr);
+  if (!day.foods) day.foods = [];
+  const now = new Date().getHours();
+  const meal = now < 10 ? '🌅 아침' : now < 15 ? '☀️ 점심' : now < 20 ? '🌙 저녁' : '🍫 야식';
+  day.foods.push({ id:Date.now(), name, cal, meal });
+  saveDB(db);
+  document.getElementById('sheet-food-'+dateStr).value = '';
+  document.getElementById('sheet-food-results-'+dateStr).innerHTML = '';
+  refreshDaySheet(dateStr); renderCalendar(); renderHome();
+  showToast(`✅ ${name} ${cal}kcal 추가!`);
+}
+
+function sheetDelFood(dateStr, idx) {
+  const db = loadDB(); const day = getDay(db, dateStr);
+  day.foods.splice(idx, 1); saveDB(db);
+  refreshDaySheet(dateStr); renderCalendar();
+}
+
+function sheetRounding(dateStr, count) {
+  const amount = count * 150000;
+  const db = loadDB(); const day = getDay(db, dateStr);
+  if (!day.finance) day.finance = [];
+  day.finance.push({ id:Date.now(), type:'income', amount, category:'캐디수당', memo:`라운딩 ${count}회`, method:'현금', date:dateStr });
+  saveDB(db); refreshDaySheet(dateStr); renderCalendar(); renderHome();
+  showToast(`⛳ ${count}회 +${fmt(amount)}원 저장!`);
+}
+
+function sheetAddTip(dateStr) {
+  const tip = parseInt(document.getElementById('sheet-tip-'+dateStr).value);
+  if (!tip || tip <= 0) { showToast('팁 금액을 입력해주세요'); return; }
+  const db = loadDB(); const day = getDay(db, dateStr);
+  if (!day.finance) day.finance = [];
+  day.finance.push({ id:Date.now(), type:'income', amount:tip, category:'팁', memo:'캐디 팁', method:'현금', date:dateStr });
+  saveDB(db);
+  document.getElementById('sheet-tip-'+dateStr).value = '';
+  refreshDaySheet(dateStr); renderCalendar(); renderHome();
+  showToast(`💝 팁 +${fmt(tip)}원 저장!`);
+}
+
+function sheetDelFinance(dateStr, idx) {
+  const db = loadDB(); const day = getDay(db, dateStr);
+  day.finance.splice(idx, 1); saveDB(db);
+  refreshDaySheet(dateStr); renderCalendar();
+}
+
+// ═══════════════════════════════════════════
+// 빠른 가계부 입력 (라운딩/팁)
+// ═══════════════════════════════════════════
+function quickRounding(count) {
+  const amount = count * 150000;
+  const db = loadDB();
+  const t = document.getElementById('fin-date').value || today();
+  const day = getDay(db, t);
+  if (!day.finance) day.finance = [];
+  day.finance.push({
+    id: Date.now(), type: 'income', amount,
+    category: '캐디수당', memo: `라운딩 ${count}회`,
+    method: '현금', date: t
+  });
+  saveDB(db);
+  renderFinance();
+  renderHome();
+  showToast(`✅ 라운딩 ${count}회 +${fmt(amount)}원 저장!`);
+}
+
+function quickTip() {
+  const tip = parseInt(document.getElementById('quick-tip').value);
+  if (!tip || tip <= 0) { showToast('팁 금액을 입력해주세요'); return; }
+  const db = loadDB();
+  const t = document.getElementById('fin-date').value || today();
+  const day = getDay(db, t);
+  if (!day.finance) day.finance = [];
+  day.finance.push({
+    id: Date.now(), type: 'income', amount: tip,
+    category: '팁', memo: '캐디 팁',
+    method: '현금', date: t
+  });
+  saveDB(db);
+  document.getElementById('quick-tip').value = '';
+  renderFinance();
+  renderHome();
+  showToast(`✅ 팁 +${fmt(tip)}원 저장!`);
+}
+
+function showToast(msg) {
+  let el = document.getElementById('toast-msg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast-msg';
+    el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a2e1a;color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;z-index:9999;transition:opacity .3s;white-space:nowrap';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.style.opacity = '0', 2500);
+}
+
+// ═══════════════════════════════════════════
+// 사진 갤러리
+// ═══════════════════════════════════════════
+function addGalleryPhoto(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  const dateStr = document.getElementById('gallery-date').value || today();
+  Promise.all(files.map(compressPhoto)).then(results => {
+    const db = loadDB();
+    const day = getDay(db, dateStr);
+    day.photos = [...(day.photos||[]), ...results];
+    saveDB(db);
+    renderPhotoGallery();
+    showToast(`✅ ${results.length}장 저장됐어요!`);
+  });
+  input.value = '';
+}
+
+function renderPhotoGallery() {
+  const db = loadDB();
+  const days = db.days || {};
+  const grid = document.getElementById('photo-gallery-grid');
+  if (!grid) return;
+  // 날짜 역순으로 모든 사진 수집
+  const allPhotos = [];
+  Object.entries(days).sort((a,b) => b[0].localeCompare(a[0])).forEach(([date, day]) => {
+    (day.photos||[]).forEach((src, i) => allPhotos.push({date, src, i}));
+  });
+  if (allPhotos.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text2)">사진이 없어요 📷<br>위에서 추가해보세요!</div>';
+    return;
+  }
+  grid.innerHTML = allPhotos.map(p => `
+    <div style="position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--border)">
+      <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="viewPhoto('${p.src}')">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);color:#fff;font-size:9px;padding:3px 5px">${p.date}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// 만보계 (DeviceMotion)
+// ═══════════════════════════════════════════
+let pedometerOn = false;
+let pedometerSteps = 0;
+let lastMag = 0;
+let lastPeak = false;
+const STEP_THRESHOLD = 12;
+const STEP_COOLDOWN = 300;
+let lastStepTime = 0;
+
+// 걸음수 탭 열면 자동 시작
+function autoPedometerStart() {
+  if (!pedometerOn) startPedometer();
+}
+
+function togglePedometer() {
+  if (pedometerOn) {
+    stopPedometer();
+  } else {
+    startPedometer();
+  }
+}
+
+function startPedometer() {
+  const statusEl = document.getElementById('pedo-status');
+  // iOS는 권한 요청 필요
+  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission().then(state => {
+      if (state === 'granted') {
+        activatePedometer();
+      } else {
+        statusEl.textContent = '❌ 동작 권한이 거부됐어요. 설정에서 허용해주세요.';
+      }
+    }).catch(() => activatePedometer());
+  } else {
+    activatePedometer();
+  }
+}
+
+function activatePedometer() {
+  pedometerOn = true;
+  window.addEventListener('devicemotion', onMotion);
+  document.getElementById('pedo-btn').textContent = '⏹ 측정 중지';
+  document.getElementById('pedo-btn').style.background = '#ef4444';
+  document.getElementById('pedo-status').textContent = '✅ 측정 중... 폰을 들고 걸어보세요!';
+}
+
+function stopPedometer() {
+  pedometerOn = false;
+  window.removeEventListener('devicemotion', onMotion);
+  document.getElementById('pedo-btn').textContent = '🏃 측정 시작';
+  document.getElementById('pedo-btn').style.background = '';
+  document.getElementById('pedo-status').textContent = `멈췄어요. 총 ${pedometerSteps}걸음 측정됨.`;
+}
+
+function onMotion(e) {
+  const acc = e.accelerationIncludingGravity;
+  if (!acc) return;
+  const mag = Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2);
+  const now = Date.now();
+  const delta = Math.abs(mag - lastMag);
+  if (delta > STEP_THRESHOLD && !lastPeak && (now - lastStepTime) > STEP_COOLDOWN) {
+    pedometerSteps++;
+    lastStepTime = now;
+    lastPeak = true;
+    document.getElementById('pedo-count').textContent = pedometerSteps.toLocaleString();
+  } else if (delta < STEP_THRESHOLD / 2) {
+    lastPeak = false;
+  }
+  lastMag = mag;
+}
+
+function savePedometerSteps() {
+  if (pedometerSteps === 0) return;
+  const db = loadDB();
+  const day = getDay(db, today());
+  day.steps = (day.steps || 0) + pedometerSteps;
+  saveDB(db);
+  pedometerSteps = 0;
+  document.getElementById('pedo-count').textContent = '0';
+  renderSteps();
+  renderHome();
+  document.getElementById('pedo-status').textContent = '✅ 오늘 기록에 자동 저장됐어요!';
+}
+
+// 1분마다 자동 저장
+setInterval(() => { if (pedometerOn && pedometerSteps > 0) savePedometerSteps(); }, 60 * 1000);
+
+// 앱 숨김/종료 시 자동 저장
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && pedometerOn && pedometerSteps > 0) savePedometerSteps();
+});
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function init() {
+  const now = new Date();
+  document.getElementById('headerDate').textContent =
+    `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} (${dayOfWeek[now.getDay()]})`;
+
+  // Set today as default for all date inputs
+  document.getElementById('fin-date').value = today();
+  document.getElementById('golf-date').value = today();
+
+  initCal();
+  initReport();
+  renderHome();
+  // Google Fit은 라이브러리 로딩 후 초기화
+  // 만보계는 steps 탭 진입 시 자동 시작
+}
+
+init();
+</script>
+
+
+</body></html>
